@@ -1,8 +1,0 @@
-version: '2'
-services:
-    railway_service-sonar:
-        container_name: railway_service-sonar
-        image: sonarqube:6.1-alpine
-        ports:
-            - 9000:9000
-            - 9092:9092
