@@ -1,0 +1,16 @@
+version: '2'
+services:
+    railway_service-app:
+        image: railway_service
+        external_links:
+            - railway_service-postgresql:postgresql
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/railway_service
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+        ports:
+            - 8080:8080
+    railway_service-postgresql:
+        extends:
+            file: postgresql.yml
+            service: railway_service-postgresql
