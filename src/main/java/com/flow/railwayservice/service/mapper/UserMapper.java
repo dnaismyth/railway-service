@@ -1,7 +1,7 @@
 package com.flow.railwayservice.service.mapper;
 
 import com.flow.railwayservice.domain.Authority;
-import com.flow.railwayservice.domain.User;
+import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.service.dto.UserDTO;
 import org.mapstruct.*;
 
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", uses = {})
 public interface UserMapper {
 
-    UserDTO userToUserDTO(User user);
+    UserDTO userToUserDTO(RUser user);
 
-    List<UserDTO> usersToUserDTOs(List<User> users);
+    List<UserDTO> usersToUserDTOs(List<RUser> users);
 
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
@@ -28,15 +28,15 @@ public interface UserMapper {
     @Mapping(target = "resetKey", ignore = true)
     @Mapping(target = "resetDate", ignore = true)
     @Mapping(target = "password", ignore = true)
-    User userDTOToUser(UserDTO userDTO);
+    RUser userDTOToUser(UserDTO userDTO);
 
-    List<User> userDTOsToUsers(List<UserDTO> userDTOs);
+    List<RUser> userDTOsToUsers(List<UserDTO> userDTOs);
 
-    default User userFromId(Long id) {
+    default RUser userFromId(Long id) {
         if (id == null) {
             return null;
         }
-        User user = new User();
+        RUser user = new RUser();
         user.setId(id);
         return user;
     }

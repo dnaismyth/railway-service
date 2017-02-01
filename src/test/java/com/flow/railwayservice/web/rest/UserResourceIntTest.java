@@ -1,7 +1,7 @@
 package com.flow.railwayservice.web.rest;
 
 import com.flow.railwayservice.RailwayserviceApp;
-import com.flow.railwayservice.domain.User;
+import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.service.UserService;
 
@@ -45,8 +45,8 @@ public class UserResourceIntTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static User createEntity(EntityManager em) {
-        User user = new User();
+    public static RUser createEntity(EntityManager em) {
+        RUser user = new RUser();
         user.setLogin("test");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);

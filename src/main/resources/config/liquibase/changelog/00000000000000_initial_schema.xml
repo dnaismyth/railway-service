@@ -22,7 +22,7 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-        <createTable tableName="jhi_user">
+        <createTable tableName="railway_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -54,13 +54,13 @@
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
         <createIndex indexName="idx_user_login"
-            tableName="jhi_user"
+            tableName="railway_user"
             unique="true">
             <column name="login" type="varchar(50)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"
-            tableName="jhi_user"
+            tableName="railway_user"
             unique="true">
             <column name="email" type="varchar(100)"/>
         </createIndex>
@@ -91,15 +91,15 @@
                                  baseTableName="jhi_user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="railway_user"/>
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
-                  tableName="jhi_user">
+                  tableName="railway_user">
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
-        <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="railway_user" columnName="created_date" columnDataType="datetime"/>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"
@@ -182,7 +182,7 @@
             baseTableName="oauth_client_token"
             constraintName="fk_oauth_client_token_user_name"
             referencedColumnNames="login"
-            referencedTableName="jhi_user"/>
+            referencedTableName="railway_user"/>
 
         <createTable tableName="oauth_access_token">
             <column name="token_id" type="varchar(255)"/>
@@ -200,7 +200,7 @@
             baseTableName="oauth_access_token"
             constraintName="fk_oauth_access_token_user_name"
             referencedColumnNames="login"
-            referencedTableName="jhi_user"/>
+            referencedTableName="railway_user"/>
 
         <createTable tableName="oauth_refresh_token">
             <column name="token_id" type="varchar(255)"/>

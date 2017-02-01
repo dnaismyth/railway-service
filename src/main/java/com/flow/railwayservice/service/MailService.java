@@ -1,7 +1,7 @@
 package com.flow.railwayservice.service;
 
 import com.flow.railwayservice.config.JHipsterProperties;
-import com.flow.railwayservice.domain.User;
+import com.flow.railwayservice.domain.RUser;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class MailService {
     }
 
     @Async
-    public void sendActivationEmail(User user) {
+    public void sendActivationEmail(RUser user) {
         log.debug("Sending activation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
@@ -78,7 +78,7 @@ public class MailService {
     }
 
     @Async
-    public void sendCreationEmail(User user) {
+    public void sendCreationEmail(RUser user) {
         log.debug("Sending creation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
@@ -90,7 +90,7 @@ public class MailService {
     }
 
     @Async
-    public void sendPasswordResetMail(User user) {
+    public void sendPasswordResetMail(RUser user) {
         log.debug("Sending password reset e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);

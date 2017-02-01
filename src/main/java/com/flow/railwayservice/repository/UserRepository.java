@@ -1,6 +1,6 @@
 package com.flow.railwayservice.repository;
 
-import com.flow.railwayservice.domain.User;
+import com.flow.railwayservice.domain.RUser;
 
 import java.time.ZonedDateTime;
 import org.springframework.data.domain.Page;
@@ -14,19 +14,19 @@ import java.util.Optional;
 /**
  * Spring Data JPA repository for the User entity.
  */
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<RUser, Long> {
 
-    Optional<User> findOneByActivationKey(String activationKey);
+    Optional<RUser> findOneByActivationKey(String activationKey);
 
-    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
+    List<RUser> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
 
-    Optional<User> findOneByResetKey(String resetKey);
+    Optional<RUser> findOneByResetKey(String resetKey);
 
-    Optional<User> findOneByEmail(String email);
+    Optional<RUser> findOneByEmail(String email);
 
-    Optional<User> findOneByLogin(String login);
+    Optional<RUser> findOneByLogin(String login);
 
-    @Query(value = "select distinct user from User user left join fetch user.authorities",
-        countQuery = "select count(user) from User user")
-    Page<User> findAllWithAuthorities(Pageable pageable);
+    @Query(value = "select distinct user from RUser user left join fetch user.authorities",
+        countQuery = "select count(user) from RUser user")
+    Page<RUser> findAllWithAuthorities(Pageable pageable);
 }

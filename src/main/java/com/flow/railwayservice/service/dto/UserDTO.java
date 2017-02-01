@@ -3,7 +3,7 @@ package com.flow.railwayservice.service.dto;
 import com.flow.railwayservice.config.Constants;
 
 import com.flow.railwayservice.domain.Authority;
-import com.flow.railwayservice.domain.User;
+import com.flow.railwayservice.domain.RUser;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -40,7 +40,7 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(User user) {
+    public UserDTO(RUser user) {
         this(user.getLogin(), user.getFirstName(), user.getLastName(),
             user.getEmail(), user.getActivated(), user.getLangKey(),
             user.getAuthorities().stream().map(Authority::getName)

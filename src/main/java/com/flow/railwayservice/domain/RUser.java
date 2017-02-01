@@ -21,9 +21,9 @@ import java.time.ZonedDateTime;
  * A user.
  */
 @Entity
-@Table(name = "jhi_user")
+@Table(name = "railway_user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class User extends AbstractAuditingEntity implements Serializable {
+public class RUser extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -191,7 +191,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             return false;
         }
 
-        User user = (User) o;
+        RUser user = (RUser) o;
 
         if (!login.equals(user.login)) {
             return false;

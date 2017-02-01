@@ -1,7 +1,7 @@
 package com.flow.railwayservice.service;
 
 import com.flow.railwayservice.domain.Authority;
-import com.flow.railwayservice.domain.User;
+import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.repository.AuthorityRepository;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.security.AuthoritiesConstants;
@@ -41,7 +41,7 @@ public class UserService {
     @Inject
     private AuthorityRepository authorityRepository;
 
-    public Optional<User> activateRegistration(String key) {
+    public Optional<RUser> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
             .map(user -> {
@@ -53,7 +53,7 @@ public class UserService {
             });
     }
 
-    public Optional<User> completePasswordReset(String newPassword, String key) {
+    public Optional<RUser> completePasswordReset(String newPassword, String key) {
        log.debug("Reset user password for reset key {}", key);
 
        return userRepository.findOneByResetKey(key)
@@ -69,9 +69,9 @@ public class UserService {
            });
     }
 
-    public Optional<User> requestPasswordReset(String mail) {
+    public Optional<RUser> requestPasswordReset(String mail) {
         return userRepository.findOneByEmail(mail)
-            .filter(User::getActivated)
+            .filter(RUser::getActivated)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(ZonedDateTime.now());
@@ -79,10 +79,10 @@ public class UserService {
             });
     }
 
-    public User createUser(String login, String password, String firstName, String lastName, String email,
+    public RUser createUser(String login, String password, String firstName, String lastName, String email,
         String langKey) {
 
-        User newUser = new User();
+        RUser newUser = new RUser();
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
@@ -104,8 +104,8 @@ public class UserService {
         return newUser;
     }
 
-    public User createUser(ManagedUserVM managedUserVM) {
-        User user = new User();
+    public RUser createUser(ManagedUserVM managedUserVM) {
+        RUser user = new RUser();
         user.setLogin(managedUserVM.getLogin());
         user.setFirstName(managedUserVM.getFirstName());
         user.setLastName(managedUserVM.getLastName());
@@ -181,7 +181,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+    public Optional<RUser> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login).map(user -> {
             user.getAuthorities().size();
             return user;
@@ -189,16 +189,16 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User getUserWithAuthorities(Long id) {
-        User user = userRepository.findOne(id);
+    public RUser getUserWithAuthorities(Long id) {
+        RUser user = userRepository.findOne(id);
         user.getAuthorities().size(); // eagerly load the association
         return user;
     }
 
     @Transactional(readOnly = true)
-    public User getUserWithAuthorities() {
-        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        User user = null;
+    public RUser getUserWithAuthorities() {
+        Optional<RUser> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        RUser user = null;
         if (optionalUser.isPresent()) {
           user = optionalUser.get();
             user.getAuthorities().size(); // eagerly load the association
@@ -216,8 +216,8 @@ public class UserService {
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         ZonedDateTime now = ZonedDateTime.now();
-        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
-        for (User user : users) {
+        List<RUser> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
+        for (RUser user : users) {
             log.debug("Deleting not activated user {}", user.getLogin());
             userRepository.delete(user);
         }
