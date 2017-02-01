@@ -1,0 +1,12 @@
+version: '2'
+services:
+    railwayservice-postgresql:
+        container_name: railwayservice-postgresql
+        image: postgres:9.5.4
+        # volumes:
+        #     - ~/volumes/jhipster/railwayservice/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=railwayservice
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432
