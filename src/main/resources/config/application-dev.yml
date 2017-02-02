@@ -24,9 +24,9 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/railwayservice
+        url: jdbc:postgresql://localhost:5432/railway
         name:
-        username: railwayservice
+        username: postgres
         password:
     jpa:
         database-platform: com.flow.railwayservice.domain.util.FixedPostgreSQL82Dialect

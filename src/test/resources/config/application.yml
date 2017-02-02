@@ -18,10 +18,10 @@ spring:
         serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:railwayservice;DB_CLOSE_DELAY=-1
+        url: jdbc:postgresql://localhost:5432/railwaytest
         name:
-        username:
-        password:
+        username: postgres
+        password: postgres
     jpa:
         database-platform: com.flow.railwayservice.domain.util.FixedH2Dialect
         database: H2
