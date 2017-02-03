@@ -2,6 +2,7 @@ package com.flow.railwayservice.service;
 
 import com.flow.railwayservice.domain.Authority;
 import com.flow.railwayservice.domain.RUser;
+import com.flow.railwayservice.dto.UserRole;
 import com.flow.railwayservice.repository.AuthorityRepository;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.security.AuthoritiesConstants;
@@ -83,8 +84,6 @@ public class UserService {
         String langKey) {
 
         RUser newUser = new RUser();
-        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
-        Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(login);
         // new user gets initially a generated password
@@ -97,8 +96,7 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        authorities.add(authority);
-        newUser.setAuthorities(authorities);
+        newUser.setUserRole(UserRole.USER);
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -115,13 +113,7 @@ public class UserService {
         } else {
             user.setLangKey(managedUserVM.getLangKey());
         }
-        if (managedUserVM.getAuthorities() != null) {
-            Set<Authority> authorities = new HashSet<>();
-            managedUserVM.getAuthorities().forEach(
-                authority -> authorities.add(authorityRepository.findOne(authority))
-            );
-            user.setAuthorities(authorities);
-        }
+        user.setUserRole(managedUserVM.getRole());
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -143,7 +135,7 @@ public class UserService {
     }
 
     public void updateUser(Long id, String login, String firstName, String lastName, String email,
-        boolean activated, String langKey, Set<String> authorities) {
+        boolean activated, String langKey, UserRole role) {
 
         Optional.of(userRepository
             .findOne(id))
@@ -154,11 +146,7 @@ public class UserService {
                 user.setEmail(email);
                 user.setActivated(activated);
                 user.setLangKey(langKey);
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                authorities.forEach(
-                    authority -> managedAuthorities.add(authorityRepository.findOne(authority))
-                );
+                user.setUserRole(role);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -183,7 +171,6 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<RUser> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login).map(user -> {
-            user.getAuthorities().size();
             return user;
         });
     }
@@ -191,7 +178,6 @@ public class UserService {
     @Transactional(readOnly = true)
     public RUser getUserWithAuthorities(Long id) {
         RUser user = userRepository.findOne(id);
-        user.getAuthorities().size(); // eagerly load the association
         return user;
     }
 
@@ -201,7 +187,6 @@ public class UserService {
         RUser user = null;
         if (optionalUser.isPresent()) {
           user = optionalUser.get();
-            user.getAuthorities().size(); // eagerly load the association
          }
          return user;
     }

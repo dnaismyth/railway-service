@@ -1,6 +1,7 @@
 package com.flow.railwayservice.security;
 
 import com.flow.railwayservice.domain.RUser;
+import com.flow.railwayservice.dto.UserRole;
 import com.flow.railwayservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,13 +37,35 @@ public class UserDetailsService implements org.springframework.security.core.use
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
             }
-            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-                .collect(Collectors.toList());
+            List<GrantedAuthority> grantedAuthorities = getUserAuthorities(userFromDatabase.get());
             return new org.springframework.security.core.userdetails.User(lowercaseLogin,
                 user.getPassword(),
                 grantedAuthorities);
         }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
         "database"));
+    }
+    
+    /**
+     * Map authorities
+     * @param ru
+     * @return
+     */
+    public List<GrantedAuthority> getUserAuthorities(RUser ru){
+    	List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+    	switch(ru.getRole()){
+    	case ADMIN:
+    		authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.name()));
+    		break;
+    	case USER:
+    		authorities.add(new SimpleGrantedAuthority(UserRole.USER.name()));
+    		break;
+    	case GUEST:
+    		authorities.add(new SimpleGrantedAuthority(UserRole.GUEST.name()));
+    		break;
+    	default:
+    		break;
+    	}
+    	
+    	return authorities;
     }
 }

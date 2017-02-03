@@ -1,7 +1,7 @@
 package com.flow.railwayservice.domain;
 
 import com.flow.railwayservice.config.Constants;
-
+import com.flow.railwayservice.dto.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -75,15 +75,9 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "reset_date", nullable = true)
     private ZonedDateTime resetDate = null;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-        name = "jhi_user_authority",
-        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Authority> authorities = new HashSet<>();
+    
+    @Column(name="role_type")
+    private UserRole role;
 
     public Long getId() {
         return id;
@@ -173,13 +167,13 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
-
-    public Set<Authority> getAuthorities() {
-        return authorities;
+    
+    public UserRole getRole(){
+    	return role;
     }
-
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
+    
+    public void setUserRole(UserRole role){
+    	this.role = role;
     }
 
     @Override

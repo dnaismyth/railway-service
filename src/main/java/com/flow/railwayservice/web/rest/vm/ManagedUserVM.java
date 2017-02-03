@@ -5,6 +5,7 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 
 import com.flow.railwayservice.domain.RUser;
+import com.flow.railwayservice.dto.UserRole;
 import com.flow.railwayservice.service.dto.UserDTO;
 import javax.validation.constraints.Size;
 
@@ -43,9 +44,9 @@ public class ManagedUserVM extends UserDTO {
     }
 
     public ManagedUserVM(Long id, String login, String password, String firstName, String lastName,
-                         String email, boolean activated, String langKey, Set<String> authorities,
+                         String email, boolean activated, String langKey, UserRole role,
                          String createdBy, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate) {
-        super(login, firstName, lastName, email, activated, langKey, authorities);
+        super(login, firstName, lastName, email, activated, langKey, role);
         this.id = id;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
