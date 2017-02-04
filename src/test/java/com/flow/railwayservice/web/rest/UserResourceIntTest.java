@@ -51,8 +51,7 @@ public class UserResourceIntTest {
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         user.setEmail("test@test.com");
-        user.setFirstName("test");
-        user.setLastName("test");
+        user.setName("test");
         user.setLangKey("en");
         em.persist(user);
         em.flush();
@@ -65,15 +64,6 @@ public class UserResourceIntTest {
         ReflectionTestUtils.setField(userResource, "userRepository", userRepository);
         ReflectionTestUtils.setField(userResource, "userService", userService);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
-    }
-
-    @Test
-    public void testGetExistingUser() throws Exception {
-        restUserMockMvc.perform(get("/api/users/admin")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.lastName").value("Administrator"));
     }
 
     @Test

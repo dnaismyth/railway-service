@@ -17,26 +17,24 @@ spring:
     jackson:
         serialization.write_dates_as_timestamps: false
     datasource:
-        type: com.zaxxer.hikari.HikariDataSource
+        platform: postgres
         url: jdbc:postgresql://localhost:5432/railwaytest
         name:
         username: postgres
         password: postgres
     jpa:
-        database-platform: com.flow.railwayservice.domain.util.FixedH2Dialect
-        database: H2
+        database: POSTGRESQL
         open-in-view: false
         show-sql: true
         hibernate:
             ddl-auto: none
             naming:
-                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+                naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy               
         properties:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.hbm2ddl.auto: validate
+            hibernate.hbm2ddl.auto: update
     mail:
         host: localhost
     mvc:
@@ -46,6 +44,7 @@ spring:
         mode: XHTML
 
 liquibase:
+    enabled: false
     contexts: test
 
 security:

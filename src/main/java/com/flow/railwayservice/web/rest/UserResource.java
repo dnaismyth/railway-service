@@ -123,8 +123,8 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "userexists", "Login already in use")).body(null);
         }
-        userService.updateUser(managedUserVM.getId(), managedUserVM.getLogin(), managedUserVM.getFirstName(),
-            managedUserVM.getLastName(), managedUserVM.getEmail(), managedUserVM.isActivated(),
+        userService.updateUser(managedUserVM.getId(), managedUserVM.getLogin(), managedUserVM.getName(), 
+        		managedUserVM.getEmail(), managedUserVM.isActivated(),
             managedUserVM.getLangKey(), managedUserVM.getRole());
 
         return ResponseEntity.ok()

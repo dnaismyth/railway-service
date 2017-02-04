@@ -2,7 +2,6 @@ package com.flow.railwayservice.service.dto;
 
 import com.flow.railwayservice.config.Constants;
 
-import com.flow.railwayservice.domain.Authority;
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.dto.UserRole;
 
@@ -22,10 +21,7 @@ public class UserDTO {
     private String login;
 
     @Size(max = 50)
-    private String firstName;
-
-    @Size(max = 50)
-    private String lastName;
+    private String name;
 
     @Email
     @Size(min = 5, max = 100)
@@ -42,17 +38,16 @@ public class UserDTO {
     }
 
     public UserDTO(RUser user) {
-        this(user.getLogin(), user.getFirstName(), user.getLastName(),
+        this(user.getLogin(), user.getName(),
             user.getEmail(), user.getActivated(), user.getLangKey(),
             user.getRole());
     }
 
-    public UserDTO(String login, String firstName, String lastName,
+    public UserDTO(String login, String name,
         String email, boolean activated, String langKey, UserRole role) {
 
         this.login = login;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.email = email;
         this.activated = activated;
         this.langKey = langKey;
@@ -63,12 +58,8 @@ public class UserDTO {
         return login;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getName(){
+    	return name;
     }
 
     public String getEmail() {
@@ -91,8 +82,7 @@ public class UserDTO {
     public String toString() {
         return "UserDTO{" +
             "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
+            ", name='" + name + '\'' +
             ", email='" + email + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

@@ -27,7 +27,7 @@ spring:
         url: jdbc:postgresql://localhost:5432/railway
         name:
         username: postgres
-        password:
+        password: postgres
     jpa:
         database-platform: com.flow.railwayservice.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL

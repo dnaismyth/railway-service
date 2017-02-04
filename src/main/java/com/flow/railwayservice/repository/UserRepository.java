@@ -26,7 +26,7 @@ public interface UserRepository extends JpaRepository<RUser, Long> {
 
     Optional<RUser> findOneByLogin(String login);
 
-    @Query(value = "select distinct user from RUser user left join fetch user.authorities",
+    @Query(value = "select ru FROM RUser ru",
         countQuery = "select count(user) from RUser user")
     Page<RUser> findAllWithAuthorities(Pageable pageable);
 }

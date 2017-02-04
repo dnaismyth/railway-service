@@ -14,17 +14,14 @@ public class RLocation {
 	@Column(name="region")
 	private String region;
 	
-	@Column(name="provice")
-	private String provice;
+	@Column(name="province")
+	private String province;
 	
 	@Column(name="address")
 	private String address;
 	
-	@Column(name="latitude")
-	private Float latitude;
-	
-	@Column(name="longitude")
-	private Float longitude;
+//	@Column(name="point")
+//	private Point point;
 	
 	@Column(name="municipality")
 	private String municipality;
@@ -39,12 +36,12 @@ public class RLocation {
 		this.region = region;
 	}
 
-	public String getProvice() {
-		return provice;
+	public String getProvince() {
+		return province;
 	}
 
-	public void setProvice(String provice) {
-		this.provice = provice;
+	public void setProvince(String province) {
+		this.province = province;
 	}
 
 	public String getAddress() {
@@ -53,22 +50,6 @@ public class RLocation {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public Float getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(Float latitude) {
-		this.latitude = latitude;
-	}
-
-	public Float getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(Float longitude) {
-		this.longitude = longitude;
 	}
 
 	public String getMunicipality() {

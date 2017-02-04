@@ -1,8 +1,12 @@
 package com.flow.railwayservice.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,9 +17,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="train_crossing")
-public class RTrainCrossing {
+public class RTrainCrossing implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8997683857828805276L;
+
 	@Id
+    @GeneratedValue
 	private Long id;
 	
 	@Column(name="railway")

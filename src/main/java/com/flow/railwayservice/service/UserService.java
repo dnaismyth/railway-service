@@ -1,11 +1,8 @@
 package com.flow.railwayservice.service;
 
-import com.flow.railwayservice.domain.Authority;
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.dto.UserRole;
-import com.flow.railwayservice.repository.AuthorityRepository;
 import com.flow.railwayservice.repository.UserRepository;
-import com.flow.railwayservice.security.AuthoritiesConstants;
 import com.flow.railwayservice.security.SecurityUtils;
 import com.flow.railwayservice.service.util.RandomUtil;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
@@ -38,9 +35,6 @@ public class UserService {
 
     @Inject
     private UserRepository userRepository;
-
-    @Inject
-    private AuthorityRepository authorityRepository;
 
     public Optional<RUser> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -80,7 +74,7 @@ public class UserService {
             });
     }
 
-    public RUser createUser(String login, String password, String firstName, String lastName, String email,
+    public RUser createUser(String login, String password, String name, String email,
         String langKey) {
 
         RUser newUser = new RUser();
@@ -88,8 +82,7 @@ public class UserService {
         newUser.setLogin(login);
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
+        newUser.setName(name);
         newUser.setEmail(email);
         newUser.setLangKey(langKey);
         // new user is not active
@@ -105,8 +98,7 @@ public class UserService {
     public RUser createUser(ManagedUserVM managedUserVM) {
         RUser user = new RUser();
         user.setLogin(managedUserVM.getLogin());
-        user.setFirstName(managedUserVM.getFirstName());
-        user.setLastName(managedUserVM.getLastName());
+        user.setName(managedUserVM.getName());
         user.setEmail(managedUserVM.getEmail());
         if (managedUserVM.getLangKey() == null) {
             user.setLangKey("en"); // default language
@@ -124,25 +116,23 @@ public class UserService {
         return user;
     }
 
-    public void updateUser(String firstName, String lastName, String email, String langKey) {
+    public void updateUser(String name, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
+            user.setName(name);
             user.setEmail(email);
             user.setLangKey(langKey);
             log.debug("Changed Information for User: {}", user);
         });
     }
 
-    public void updateUser(Long id, String login, String firstName, String lastName, String email,
+    public void updateUser(Long id, String login, String name, String email,
         boolean activated, String langKey, UserRole role) {
 
         Optional.of(userRepository
             .findOne(id))
             .ifPresent(user -> {
                 user.setLogin(login);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
+                user.setName(name);
                 user.setEmail(email);
                 user.setActivated(activated);
                 user.setLangKey(langKey);
