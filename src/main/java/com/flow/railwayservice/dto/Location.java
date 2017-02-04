@@ -1,34 +1,20 @@
-package com.flow.railwayservice.domain;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-
-import com.vividsolutions.jts.geom.Point;
+package com.flow.railwayservice.dto;
 
 /**
- * Embeddable location object
+ * Location object
  * @author Dayna
  *
  */
-@Embeddable
-public class RLocation {
-	
-	@Column(name="region")
+public class Location {
+
 	private String region;
-	
-	@Column(name="province")
 	private String province;
-	
-	@Column(name="address")
 	private String address;
-	
-	@Column(name="point")
-	private Point point;
-	
-	@Column(name="municipality")
+	private double latitude;
+	private double longitude;
 	private String municipality;
 	
-	public RLocation(){}
+	public Location(){}
 
 	public String getRegion() {
 		return region;
@@ -54,6 +40,22 @@ public class RLocation {
 		this.address = address;
 	}
 
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
 	public String getMunicipality() {
 		return municipality;
 	}
@@ -62,6 +64,4 @@ public class RLocation {
 		this.municipality = municipality;
 	}
 	
-	
-
 }

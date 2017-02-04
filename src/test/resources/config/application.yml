@@ -28,6 +28,7 @@ spring:
         show-sql: true
         hibernate:
             ddl-auto: none
+            dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
             naming:
                 naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy               
         properties:
