@@ -407,11 +407,29 @@
         <!-- jhipster-needle-maven-add-dependency -->
         <!-- Application Specific Dependencies -->
         <dependency>
-        	<groupId>com.vividsolutions</groupId>
-            <artifactId>jts</artifactId>
-            <version>1.13</version>
-        </dependency>
+  			<groupId>com.vividsolutions</groupId>
+  			<artifactId>jts</artifactId>
+  			<version>1.13</version>
+		</dependency>
+		<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>${hibernate.version}</version>
+            <exclusions>
+        		<exclusion>
+            		<artifactId>postgresql</artifactId>
+            		<groupId>postgresql</groupId>
+        		</exclusion>
+    		</exclusions>
+        </dependency>    
     </dependencies>
+     <!-- add repositories for JTS and Hibernate Spatial -->
+    <repositories>
+        <repository>
+            <id>Hibernate Spatial repo</id>
+            <url>http://www.hibernatespatial.org/repository</url>
+        </repository>
+    </repositories>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <pluginManagement>

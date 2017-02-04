@@ -1,8 +1,14 @@
 package com.flow.railwayservice.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.Type;
+
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -22,11 +28,11 @@ public class RLocation {
 	@Column(name="address")
 	private String address;
 	
-	@Column(name="point")
-	private Point point;
+	@Embedded
+	private JpaPoint point;
 	
-	@Column(name="municipality")
-	private String municipality;
+	@Column(name="city")
+	private String city;
 	
 	public RLocation(){}
 
@@ -54,14 +60,20 @@ public class RLocation {
 		this.address = address;
 	}
 
-	public String getMunicipality() {
-		return municipality;
+	public String getCity() {
+		return city;
 	}
 
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
+	public void setCity(String city) {
+		this.city = city;
 	}
 	
+	public JpaPoint getPoint(){
+		return point;
+	}
 	
-
+	public void setJpaPoint(Point point){
+		this.point = new JpaPoint(point);
+	}
+	
 }

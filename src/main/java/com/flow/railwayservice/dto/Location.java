@@ -12,7 +12,7 @@ public class Location {
 	private String address;
 	private double latitude;
 	private double longitude;
-	private String municipality;
+	private String city;
 	
 	public Location(){}
 
@@ -56,12 +56,12 @@ public class Location {
 		this.longitude = longitude;
 	}
 
-	public String getMunicipality() {
-		return municipality;
+	public String getCity() {
+		return city;
 	}
 
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
+	public void setCity(String city) {
+		this.city = city;
 	}
-	
+
 }
