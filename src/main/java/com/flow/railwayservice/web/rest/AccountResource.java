@@ -3,13 +3,16 @@ package com.flow.railwayservice.web.rest;
 import com.codahale.metrics.annotation.Timed;
 
 import com.flow.railwayservice.domain.RUser;
+import com.flow.railwayservice.exception.BadRequestException;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.security.SecurityUtils;
 import com.flow.railwayservice.service.MailService;
 import com.flow.railwayservice.service.UserService;
-import com.flow.railwayservice.service.dto.UserDTO;
+import com.flow.railwayservice.service.dto.User;
 import com.flow.railwayservice.web.rest.vm.KeyAndPasswordVM;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
+import com.flow.railwayservice.web.rest.vm.SignupRequest;
+import com.flow.railwayservice.web.rest.vm.UserDTO;
 import com.flow.railwayservice.web.rest.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -66,7 +70,7 @@ public class AccountResource {
                     RUser user = userService
                         .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
                             managedUserVM.getName(),
-                            managedUserVM.getEmail().toLowerCase(), managedUserVM.getLangKey());
+                            managedUserVM.getEmail().toLowerCase());
 
                     mailService.sendActivationEmail(user);
                     return new ResponseEntity<>(HttpStatus.CREATED);

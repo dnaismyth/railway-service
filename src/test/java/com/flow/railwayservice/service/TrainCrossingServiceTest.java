@@ -29,7 +29,7 @@ public class TrainCrossingServiceTest extends BaseServiceTest {
 	@After
 	public void tearDown() throws ResourceNotFoundException{
 		for(Long id : trainCrossingIds){
-			//trainCrossingService.deleteTrainCrossing(id);
+			trainCrossingService.deleteTrainCrossing(id);
 		}
 	}
 	

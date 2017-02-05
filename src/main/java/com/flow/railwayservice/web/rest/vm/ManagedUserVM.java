@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.dto.UserRole;
-import com.flow.railwayservice.service.dto.UserDTO;
+
 import javax.validation.constraints.Size;
 
 /**

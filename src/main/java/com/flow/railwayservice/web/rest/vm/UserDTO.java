@@ -1,4 +1,4 @@
-package com.flow.railwayservice.service.dto;
+package com.flow.railwayservice.web.rest.vm;
 
 import com.flow.railwayservice.config.Constants;
 

@@ -2,10 +2,16 @@ package com.flow.railwayservice.service;
 
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.dto.UserRole;
+import com.flow.railwayservice.exception.BadRequestException;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.security.SecurityUtils;
+import com.flow.railwayservice.service.dto.User;
+import com.flow.railwayservice.service.mapper.UserMapper;
 import com.flow.railwayservice.service.util.RandomUtil;
+import com.flow.railwayservice.service.util.RestPreconditions;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
+import com.flow.railwayservice.web.rest.vm.SignupRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,6 +41,8 @@ public class UserService {
 
     @Inject
     private UserRepository userRepository;
+    
+    private UserMapper userMapper = new UserMapper();
 
     public Optional<RUser> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -74,8 +82,7 @@ public class UserService {
             });
     }
 
-    public RUser createUser(String login, String password, String name, String email,
-        String langKey) {
+    public RUser createUser(String login, String password, String name, String email) {
 
         RUser newUser = new RUser();
         String encryptedPassword = passwordEncoder.encode(password);
@@ -84,15 +91,31 @@ public class UserService {
         newUser.setPassword(encryptedPassword);
         newUser.setName(name);
         newUser.setEmail(email);
-        newUser.setLangKey(langKey);
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        newUser.setUserRole(UserRole.USER);
+        newUser.setRole(UserRole.USER);
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+    
+    public User createUserFromSignupRequest(SignupRequest req) throws BadRequestException{
+    	RestPreconditions.checkNotNull(req);
+    	if(userRepository.findOneByEmail(req.getEmail()).isPresent()){
+    		throw new BadRequestException("Email already in use.");
+    	} 
+    	User user = new User();
+    	user.setEmail(req.getEmail());
+    	user.setName(req.getName());
+    	user.setLogin(req.getEmail());
+    	user.setPassword(passwordEncoder.encode(req.getPassword()));
+    	user.setActivated(true);
+    	user.setRole(UserRole.USER);
+    	RUser ru = userMapper.toRUser(user);
+    	RUser created = userRepository.save(ru);
+    	return userMapper.toUser(created);
     }
 
     public RUser createUser(ManagedUserVM managedUserVM) {
@@ -105,7 +128,7 @@ public class UserService {
         } else {
             user.setLangKey(managedUserVM.getLangKey());
         }
-        user.setUserRole(managedUserVM.getRole());
+        user.setRole(managedUserVM.getRole());
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -136,7 +159,7 @@ public class UserService {
                 user.setEmail(email);
                 user.setActivated(activated);
                 user.setLangKey(langKey);
-                user.setUserRole(role);
+                user.setRole(role);
                 log.debug("Changed Information for User: {}", user);
             });
     }

@@ -152,7 +152,7 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     	return role;
     }
     
-    public void setUserRole(UserRole role){
+    public void setRole(UserRole role){
     	this.role = role;
     }
 

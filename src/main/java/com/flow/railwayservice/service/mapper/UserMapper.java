@@ -1,7 +1,9 @@
 package com.flow.railwayservice.service.mapper;
 
 import com.flow.railwayservice.domain.RUser;
-import com.flow.railwayservice.service.dto.UserDTO;
+import com.flow.railwayservice.service.dto.User;
+import com.flow.railwayservice.web.rest.vm.UserDTO;
+
 import org.mapstruct.*;
 
 import java.util.List;
@@ -9,34 +11,55 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Mapper for the entity User and its DTO UserDTO.
+ * Mapper for the entity User and Dto
  */
-@Mapper(componentModel = "spring", uses = {})
-public interface UserMapper {
+public class UserMapper {
+	
+	private LocationMapper locationMapper = new LocationMapper();
 
-    UserDTO userToUserDTO(RUser user);
-
-    List<UserDTO> usersToUserDTOs(List<RUser> users);
-
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "createdDate", ignore = true)
-    @Mapping(target = "lastModifiedBy", ignore = true)
-    @Mapping(target = "lastModifiedDate", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "activationKey", ignore = true)
-    @Mapping(target = "resetKey", ignore = true)
-    @Mapping(target = "resetDate", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    RUser userDTOToUser(UserDTO userDTO);
-
-    List<RUser> userDTOsToUsers(List<UserDTO> userDTOs);
-
-    default RUser userFromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        RUser user = new RUser();
-        user.setId(id);
-        return user;
+	/**
+	 * To entity user
+	 * @param u
+	 * @return
+	 */
+    public RUser toRUser(User u){
+    	RUser ru = null;
+    	
+    	if( u != null) {
+    		ru = new RUser();
+    		ru.setId(u.getId());
+    		ru.setPassword(u.getPassword());
+    		ru.setLogin(u.getLogin());
+    		ru.setEmail(u.getEmail());
+    		ru.setRole(u.getRole());
+    		ru.setName(u.getName());
+    		ru.setActivated(u.isActivated());
+    		//TODO: set location
+    	}
+    	
+    	return ru;
+    }
+    
+    /**
+     * To User DTO
+     * @param ru
+     * @return
+     */
+    public User toUser(RUser ru){
+    	User u = null;
+    	
+    	if(ru != null){
+    		u = new User();
+    		u.setId(ru.getId());
+    		u.setActivated(ru.getActivated());
+    		u.setEmail(ru.getEmail());
+    		u.setLogin(ru.getLogin());
+    		u.setPassword(ru.getPassword());
+    		u.setName(ru.getName());
+    		u.setRole(ru.getRole());	
+    		//TODO: set location
+    	}
+    	
+    	return u;
     }
 }
