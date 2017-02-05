@@ -36,7 +36,7 @@ public class UserServiceTest {
 
     @Test
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost", "en-US");
+        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost");
         Optional<RUser> maybeUser = userService.requestPasswordReset("john.doe@localhost");
         assertThat(maybeUser.isPresent()).isFalse();
         userRepository.delete(user);
@@ -44,7 +44,7 @@ public class UserServiceTest {
 
     @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
-        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost", "en-US");
+        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost");
 
         ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
         String resetKey = RandomUtil.generateResetKey();
@@ -63,7 +63,7 @@ public class UserServiceTest {
 
     @Test
     public void assertThatResetKeyMustBeValid() {
-        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost", "en-US");
+        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost");
 
         ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
         user.setActivated(true);
@@ -77,7 +77,7 @@ public class UserServiceTest {
 
     @Test
     public void assertThatUserCanResetPassword() {
-        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost", "en-US");
+        RUser user = userService.createUser("johndoe", "johndoe", "John", "john.doe@localhost");
         String oldPassword = user.getPassword();
         ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(2);
         String resetKey = RandomUtil.generateResetKey();

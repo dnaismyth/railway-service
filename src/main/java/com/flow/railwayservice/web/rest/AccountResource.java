@@ -7,6 +7,7 @@ import com.flow.railwayservice.exception.BadRequestException;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.security.SecurityUtils;
 import com.flow.railwayservice.service.MailService;
+import com.flow.railwayservice.service.TokenService;
 import com.flow.railwayservice.service.UserService;
 import com.flow.railwayservice.service.dto.User;
 import com.flow.railwayservice.web.rest.vm.KeyAndPasswordVM;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -47,6 +49,8 @@ public class AccountResource {
 
     @Inject
     private MailService mailService;
+    
+    @Inject TokenService tokenService;
 
     /**
      * POST  /register : register the user.
@@ -140,6 +144,21 @@ public class AccountResource {
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
+    
+    /**
+	 * Create a default guest user for bylaw reporters
+	 * @return
+	 * @throws BadRequestException 
+	 */
+	@RequestMapping(value="/signup", method = RequestMethod.POST)
+	@ResponseBody
+	public OAuth2AccessToken createDefaultGuestUser(@RequestBody final SignupRequest signupRequest, HttpServletRequest req) throws BadRequestException{
+		String auth = req.getHeader("Authorization");
+		//TODO: Check that it is valid authorization
+		User newUser = userService.createUserFromSignupRequest(signupRequest);
+		//mailService.sendActivationEmail(user);
+		return tokenService.grantNewTokenFromSignupRequest(signupRequest);
+	}
 
     /**
      * POST  /account/change_password : changes the current user's password

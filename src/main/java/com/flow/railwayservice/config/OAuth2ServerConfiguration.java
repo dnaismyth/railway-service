@@ -6,6 +6,7 @@ import com.flow.railwayservice.security.Http401UnauthorizedEntryPoint;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,8 @@ import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
@@ -112,24 +115,35 @@ public class OAuth2ServerConfiguration {
         @Qualifier("authenticationManagerBean")
         private AuthenticationManager authenticationManager;
 
-        @Override
-        public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-                throws Exception {
-            endpoints
-                .authorizationCodeServices(authorizationCodeServices())
-                .approvalStore(approvalStore())
-                .tokenStore(tokenStore)
-                .authenticationManager(authenticationManager);
-        }
+//        @Override
+//        public void configure(AuthorizationServerEndpointsConfigurer endpoints)
+//                throws Exception {
+//            endpoints
+//                .authorizationCodeServices(authorizationCodeServices())
+//                .approvalStore(approvalStore())
+//                .tokenStore(tokenStore)
+//                .authenticationManager(authenticationManager);
+//        }
 
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
             oauthServer.allowFormAuthenticationForClients();
         }
 
-        @Override
-        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-            clients.jdbc(dataSource);
+//        @Override
+//        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+//            clients.jdbc(dataSource);
+//        }
+        
+        @Bean
+        @Primary
+        public AuthorizationServerTokenServices createDefaultTokenServices() throws Exception {
+        	DefaultTokenServices tokenServices = new DefaultTokenServices();
+        	tokenServices.setTokenStore(tokenStore);
+        	// Disable refresh token
+        	tokenServices.setSupportRefreshToken(true);
+        	// Enabled infinte token validity
+        	return tokenServices;
         }
     }
 }
