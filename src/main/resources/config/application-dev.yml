@@ -28,6 +28,7 @@ spring:
         name:
         username: postgres
         password: postgres
+        initialize: false
     jpa:
         database-platform: com.flow.railwayservice.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL

@@ -1,0 +1,7 @@
+--insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, authorities, access_token_validity,
+--refresh_token_validity, autoapprove) values('railwayservice-web', 'res_railwayservice', 'AT7Qa52ffMvppDjd', 'read, write', 'password,refresh_token,authorization_code,implicit','ROLE_USER, ROLE_ADMIN',
+--3600, 360000, true);
+--
+--insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, authorities, access_token_validity,
+--refresh_token_validity, autoapprove) values('railwayservice-ios', 'res_railwayservice', 'kJFKCt2EzsW3j2a4', 'read, write', 'password,refresh_token,authorization_code,implicit','ROLE_USER, ROLE_ADMIN',
+--3600, 360000, true);

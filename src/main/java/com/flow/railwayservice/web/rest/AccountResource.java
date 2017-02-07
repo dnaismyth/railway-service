@@ -23,6 +23,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -157,7 +159,7 @@ public class AccountResource {
 		//TODO: Check that it is valid authorization
 		User newUser = userService.createUserFromSignupRequest(signupRequest);
 		//mailService.sendActivationEmail(user);
-		return tokenService.grantNewTokenFromSignupRequest(signupRequest);
+		return tokenService.grantNewTokenFromSignupRequest(signupRequest, auth);
 	}
 
     /**
