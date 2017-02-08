@@ -22,6 +22,7 @@ spring:
         name:
         username: postgres
         password: postgres
+        initialize: false
     jpa:
         database: POSTGRESQL
         open-in-view: false
