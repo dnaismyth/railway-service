@@ -34,7 +34,8 @@ public class RTrainAlert implements Serializable {
 		return audioNotification;
 	}
 
-	public void setAudio(RAudioNotification audioNotification) {
+	public void setAudio(RAudioNotification audioNotification
+			) {
 		this.audioNotification = audioNotification;
 	}
 	
