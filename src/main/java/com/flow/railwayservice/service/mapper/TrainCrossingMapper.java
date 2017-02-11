@@ -1,5 +1,14 @@
 package com.flow.railwayservice.service.mapper;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.service.dto.TrainCrossing;
 
@@ -42,5 +51,14 @@ public class TrainCrossingMapper {
 			rtc.setRailway(tc.getRailway());
 		}
 		return rtc;
+	}
+	
+	public Page<TrainCrossing> toRTrainCrossing(Page<RTrainCrossing> rt, Pageable pageable){
+		List<TrainCrossing> trainCrossings = new ArrayList<TrainCrossing>();
+		Iterator<RTrainCrossing> iter = rt.iterator();
+		while(iter.hasNext()){
+			trainCrossings.add(toTrainCrossing(iter.next()));
+		}
+		return new PageImpl<TrainCrossing>(trainCrossings, pageable, trainCrossings.size());
 	}
 }
