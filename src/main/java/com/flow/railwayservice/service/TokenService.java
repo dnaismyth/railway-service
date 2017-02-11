@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.stereotype.Service;
 
+import com.flow.railwayservice.dto.ClientDetails;
 import com.flow.railwayservice.web.rest.vm.SignupRequest;
 
 @Service
@@ -46,17 +47,11 @@ public class TokenService {
 	    }
 	    Map<String, String> requestParameters = new HashMap<>();
 	    boolean approved = true;
-	    Set<String> scope = new HashSet<>();
-	    scope.add("read");		// set scopes from client id
-	    scope.add("write");
-	    Set<String> resourceIds = new HashSet<>();
-	    Set<String> responseTypes = new HashSet<>();
-	    responseTypes.add("code");
-	    Map<String, Serializable> extensionProperties = new HashMap<>();
+	    ClientDetails details = new ClientDetails(clientId, authorities);
 
 	    OAuth2Request oAuth2Request = new OAuth2Request(requestParameters, clientId,
-	            authorities, approved, scope,
-	            resourceIds, null, responseTypes, extensionProperties);
+	            details.getAuthorities(), approved, details.getScope(),
+	            details.getResourceIds(), null, null, null);
 
 		Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 	    OAuth2Authentication oauth = new OAuth2Authentication(oAuth2Request, authentication);
