@@ -37,15 +37,14 @@ public class TokenService {
 	private UserDetailsService userDetailsService;
 	
 	public OAuth2AccessToken grantNewTokenFromSignupRequest(SignupRequest req, String auth){
-		
+		String [] clientIdAndSecret = decodeClientIdAndSecret(auth);
+		String clientId = clientIdAndSecret[0];
 		UserDetails user = userDetailsService.loadUserByUsername(req.getEmail());
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 	    for(GrantedAuthority ga : user.getAuthorities()){
 	    	authorities.add(ga);
 	    }
-	    validateClientId(auth);
 	    Map<String, String> requestParameters = new HashMap<>();
-	    String clientId = "acme";	//TODO: Get client id
 	    boolean approved = true;
 	    Set<String> scope = new HashSet<>();
 	    scope.add("read");		// set scopes from client id
@@ -65,16 +64,15 @@ public class TokenService {
 	    return token;
 	}
 	
-	private void validateClientId(String authorization) {
+	private String[] decodeClientIdAndSecret(String authorization) {
+		String values [] = new String[2];
 		if (authorization != null && authorization.startsWith(BASIC_AUTH)) {
 			// Authorization: Basic base64credentials
 			String base64Credentials = authorization.substring(BASIC_AUTH.length()).trim();
 			String credentials = new String(Base64.getDecoder().decode(base64Credentials), Charset.forName("UTF-8"));
 			// credentials = username:password
-			final String[] values = credentials.split(":", 2);
-			if(values.length >= 2){
-				
-			}
+			values = credentials.split(":", 2);
 		}
+		return values;
 	}
 }
