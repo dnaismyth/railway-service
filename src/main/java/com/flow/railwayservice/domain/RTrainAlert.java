@@ -22,6 +22,11 @@ public class RTrainAlert implements Serializable {
 	@OneToOne
 	private RAudioNotification audioNotification;
 
+	public RTrainAlert(UserTrainCrossingPK userTrainCrossingPK, RAudioNotification audioNotification){
+		this.userTrainCrossingPK = userTrainCrossingPK;
+		this.audioNotification = audioNotification;
+	}
+	
 	public UserTrainCrossingPK getUserTrainCrossingPK() {
 		return userTrainCrossingPK;
 	}

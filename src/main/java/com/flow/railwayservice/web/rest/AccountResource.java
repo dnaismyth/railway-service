@@ -12,6 +12,7 @@ import com.flow.railwayservice.service.UserService;
 import com.flow.railwayservice.service.dto.User;
 import com.flow.railwayservice.web.rest.vm.KeyAndPasswordVM;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
+import com.flow.railwayservice.web.rest.vm.RestResponse;
 import com.flow.railwayservice.web.rest.vm.SignupRequest;
 import com.flow.railwayservice.web.rest.vm.UserDTO;
 import com.flow.railwayservice.web.rest.util.HeaderUtil;
@@ -150,16 +151,17 @@ public class AccountResource {
     /**
 	 * Create a default guest user for bylaw reporters
 	 * @return
-	 * @throws BadRequestException 
+     * @throws Exception 
 	 */
 	@RequestMapping(value="/signup", method = RequestMethod.POST)
 	@ResponseBody
-	public OAuth2AccessToken createDefaultGuestUser(@RequestBody final SignupRequest signupRequest, HttpServletRequest req) throws BadRequestException{
+	public RestResponse<OAuth2AccessToken> createDefaultGuestUser(@RequestBody final SignupRequest signupRequest, HttpServletRequest req) throws Exception{
 		String auth = req.getHeader("Authorization");
 		//TODO: Check that it is valid authorization
 		User newUser = userService.createUserFromSignupRequest(signupRequest);
-		//mailService.sendActivationEmail(user);
-		return tokenService.grantNewTokenFromSignupRequest(signupRequest, auth);
+		//mailService.sendActivationEmail(newUser);
+		OAuth2AccessToken token = tokenService.grantNewTokenFromSignupRequest(signupRequest, auth);
+		return new RestResponse<OAuth2AccessToken>(token);
 	}
 
     /**
