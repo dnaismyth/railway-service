@@ -2,10 +2,18 @@ package com.flow.railwayservice.service;
 
 import com.flow.railwayservice.RailwayserviceApp;
 import com.flow.railwayservice.domain.RUser;
+import com.flow.railwayservice.dto.Location;
+import com.flow.railwayservice.dto.User;
+import com.flow.railwayservice.dto.UserRole;
+import com.flow.railwayservice.exception.BadRequestException;
+import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.repository.UserRepository;
 import java.time.ZonedDateTime;
 import com.flow.railwayservice.service.util.RandomUtil;
-import java.time.LocalDate;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +41,28 @@ public class UserServiceTest {
 
     @Inject
     private UserService userService;
+    
+    private String userName = "testuser@flow.com";
+    private User user;
+    
+    @Before
+    public void setUp() throws BadRequestException{
+    	user = userService.findUserByLogin(userName);
+    	if(user == null){
+    		user = new User();
+    		user.setLogin(userName);
+    		user.setPassword("test12");
+    		user.setEmail(userName);
+    		user.setName("Test user");
+    		user.setRole(UserRole.USER);
+    		user = userService.createUser(user);
+    	}
+    }
+    
+    @After
+    public void tearDown(){
+    	
+    }
 
     @Test
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
@@ -95,10 +125,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testFindNotActivatedUsersByCreationDateBefore() {
-        userService.removeNotActivatedUsers();
-        ZonedDateTime now = ZonedDateTime.now();
-        List<RUser> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
-        assertThat(users).isEmpty();
+    public void testUserCanUpdateLocation() throws ResourceNotFoundException{
+    	Location loc = new Location();
+    	loc.setAddress("Vancouver");
+    	loc.setLatitude(49.00);
+    	loc.setLongitude(-123.00);
+    	User updated = userService.updateUserLocation(user, loc);
+    	Assert.assertEquals(loc.getAddress(), updated.getLocation().getAddress());
+    	userRepository.delete(user.getId());
     }
 }

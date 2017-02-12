@@ -1,8 +1,6 @@
-package com.flow.railwayservice.service.dto;
+package com.flow.railwayservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flow.railwayservice.dto.Location;
-import com.flow.railwayservice.dto.UserRole;
 
 public class User {
 	private Long id;

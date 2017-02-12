@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import com.flow.railwayservice.domain.RTrainCrossing;
-import com.flow.railwayservice.service.dto.TrainCrossing;
+import com.flow.railwayservice.dto.TrainCrossing;
 
 /**
  * Train crossing mapping helper

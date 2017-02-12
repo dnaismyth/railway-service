@@ -1,12 +1,17 @@
 package com.flow.railwayservice.service;
 
+import com.flow.railwayservice.domain.RLocation;
 import com.flow.railwayservice.domain.RUser;
+import com.flow.railwayservice.dto.Location;
+import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.dto.UserRole;
 import com.flow.railwayservice.exception.BadRequestException;
+import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.security.SecurityUtils;
-import com.flow.railwayservice.service.dto.User;
+import com.flow.railwayservice.service.mapper.LocationMapper;
 import com.flow.railwayservice.service.mapper.UserMapper;
+import com.flow.railwayservice.service.util.CompareUtil;
 import com.flow.railwayservice.service.util.RandomUtil;
 import com.flow.railwayservice.service.util.RestPreconditions;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
@@ -29,7 +34,7 @@ import java.util.*;
  */
 @Service
 @Transactional
-public class UserService {
+public class UserService extends ServiceBase {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -43,6 +48,7 @@ public class UserService {
     private UserRepository userRepository;
     
     private UserMapper userMapper = new UserMapper();
+    private LocationMapper locationMapper = new LocationMapper();
 
     public Optional<RUser> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -203,21 +209,73 @@ public class UserService {
          }
          return user;
     }
-
-
-    /**
-     * Not activated users should be automatically deleted after 3 days.
-     * <p>
-     * This is scheduled to get fired everyday, at 01:00 (am).
-     * </p>
-     */
-    @Scheduled(cron = "0 0 1 * * ?")
-    public void removeNotActivatedUsers() {
-        ZonedDateTime now = ZonedDateTime.now();
-        List<RUser> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
-        for (RUser user : users) {
-            log.debug("Deleting not activated user {}", user.getLogin());
-            userRepository.delete(user);
-        }
+    
+    @Transactional(readOnly = true)
+    public User getCurrentUserDTOWithAuthorities(){
+    	Optional<RUser> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        RUser user = null;
+        if (optionalUser.isPresent()) {
+          user = optionalUser.get();
+         }
+         return userMapper.toUser(user);
     }
+    
+    // ** Train Crossing Specific services ** //
+    
+    /**
+     * User location update
+     * @param user
+     * @param location
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    public User updateUserLocation(User user, Location location) throws ResourceNotFoundException{
+    	RestPreconditions.checkNotNull(user);
+    	RestPreconditions.checkNotNull(location);
+    	boolean dirty = false;
+    	RUser ru = loadUserEntity(user.getId());
+    	RLocation newLocation = locationMapper.toRLocation(location);
+    	if(!CompareUtil.compare(ru.getLocation(), newLocation)){
+    		ru.setLocation(newLocation);
+    		dirty = true;
+    	}
+    	if(dirty){
+    		userRepository.save(ru);
+    	}
+    	user.setLocation(location);
+    	return user;
+    }
+    
+    /**
+     * Find one user by their login
+     * @param login
+     * @return
+     */
+    public User findUserByLogin(String login){
+    	RestPreconditions.checkNotNull(login);
+    	Optional<RUser> ru = userRepository.findOneByLogin(login);
+    	User user = null;
+    	if(ru.isPresent()){
+    		user = userMapper.toUser(ru.get());
+    	}
+    	return user;
+    }
+    
+    public User createUser(User user) throws BadRequestException{
+    	RestPreconditions.checkNotNull(user);
+    	Optional<RUser> found = userRepository.findOneByEmail(user.getEmail());
+    	if(found.isPresent()){
+    		throw new BadRequestException("Email already in use.");
+    	}
+    	user.setEmail(user.getEmail());
+    	user.setName(user.getName());
+    	user.setLogin(user.getEmail());
+    	user.setPassword(passwordEncoder.encode(user.getPassword()));
+    	user.setActivated(true);
+    	user.setRole(UserRole.USER);
+    	RUser ru = userMapper.toRUser(user);
+    	RUser created = userRepository.save(ru);
+    	return userMapper.toUser(created);
+    }
+  
 }

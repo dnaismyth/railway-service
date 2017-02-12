@@ -1,14 +1,7 @@
 package com.flow.railwayservice.service.mapper;
 
 import com.flow.railwayservice.domain.RUser;
-import com.flow.railwayservice.service.dto.User;
-import com.flow.railwayservice.web.rest.vm.UserDTO;
-
-import org.mapstruct.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.flow.railwayservice.dto.User;
 
 /**
  * Mapper for the entity User and Dto
@@ -34,7 +27,7 @@ public class UserMapper {
     		ru.setRole(u.getRole());
     		ru.setName(u.getName());
     		ru.setActivated(u.isActivated());
-    		//TODO: set location
+    		ru.setLocation(locationMapper.toRLocation(u.getLocation()));
     	}
     	
     	return ru;
@@ -57,7 +50,7 @@ public class UserMapper {
     		u.setPassword(ru.getPassword());
     		u.setName(ru.getName());
     		u.setRole(ru.getRole());	
-    		//TODO: set location
+    		u.setLocation(locationMapper.toLocation(ru.getLocation()));
     	}
     	
     	return u;

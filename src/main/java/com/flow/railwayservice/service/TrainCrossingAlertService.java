@@ -7,10 +7,10 @@ import com.flow.railwayservice.domain.RTrainAlert;
 import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.domain.UserTrainCrossingPK;
+import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.BadRequestException;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.repository.TrainAlertRepository;
-import com.flow.railwayservice.service.dto.User;
 import com.flow.railwayservice.service.util.RestPreconditions;
 
 @Service

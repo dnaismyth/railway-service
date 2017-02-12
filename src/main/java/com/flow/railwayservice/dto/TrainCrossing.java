@@ -1,6 +1,4 @@
-package com.flow.railwayservice.service.dto;
-
-import com.flow.railwayservice.dto.Location;
+package com.flow.railwayservice.dto;
 
 public class TrainCrossing {
 

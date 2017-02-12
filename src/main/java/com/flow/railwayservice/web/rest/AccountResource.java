@@ -3,13 +3,13 @@ package com.flow.railwayservice.web.rest;
 import com.codahale.metrics.annotation.Timed;
 
 import com.flow.railwayservice.domain.RUser;
+import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.BadRequestException;
 import com.flow.railwayservice.repository.UserRepository;
 import com.flow.railwayservice.security.SecurityUtils;
 import com.flow.railwayservice.service.MailService;
 import com.flow.railwayservice.service.TokenService;
 import com.flow.railwayservice.service.UserService;
-import com.flow.railwayservice.service.dto.User;
 import com.flow.railwayservice.web.rest.vm.KeyAndPasswordVM;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
 import com.flow.railwayservice.web.rest.vm.RestResponse;

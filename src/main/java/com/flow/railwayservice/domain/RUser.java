@@ -67,6 +67,9 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     
     @Column(name="role_type")
     private UserRole role;
+    
+    @Embedded
+    private RLocation location;
 
     public Long getId() {
         return id;
@@ -154,6 +157,14 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     
     public void setRole(UserRole role){
     	this.role = role;
+    }
+    
+    public RLocation getLocation(){
+    	return location;
+    }
+    
+    public void setLocation(RLocation location){
+    	this.location = location;
     }
 
     @Override

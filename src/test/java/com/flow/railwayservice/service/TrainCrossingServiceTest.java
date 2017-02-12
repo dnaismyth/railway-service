@@ -12,8 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import com.flow.railwayservice.dto.Location;
+import com.flow.railwayservice.dto.TrainCrossing;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
-import com.flow.railwayservice.service.dto.TrainCrossing;
 
 
 public class TrainCrossingServiceTest extends BaseServiceTest {

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flow.railwayservice.domain.RTrainCrossing;
+import com.flow.railwayservice.dto.TrainCrossing;
+import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.repository.TrainCrossingRepository;
-import com.flow.railwayservice.service.dto.TrainCrossing;
-import com.flow.railwayservice.service.dto.User;
 import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
 
@@ -47,6 +47,7 @@ public class TrainCrossingService extends ServiceBase {
 	public List<TrainCrossing> getTrainCrossingsNearby(User user, int radius){
 		RestPreconditions.checkNotNull(user);
 		RestPreconditions.checkNotNull(radius);
+		
 		List<TrainCrossing> nearbyTrainCrossings = new ArrayList<TrainCrossing>();
 		return nearbyTrainCrossings;
 	}

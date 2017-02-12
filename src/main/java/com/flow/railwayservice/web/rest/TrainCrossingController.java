@@ -1,5 +1,7 @@
 package com.flow.railwayservice.web.rest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,14 +12,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flow.railwayservice.dto.TrainCrossing;
+import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.service.TrainCrossingService;
-import com.flow.railwayservice.service.dto.TrainCrossing;
+import com.flow.railwayservice.web.rest.vm.CollectionResponse;
 import com.flow.railwayservice.web.rest.vm.PageResponse;
 import com.flow.railwayservice.web.rest.vm.RestResponse;
 
+/**
+ * TrainCrossing controller
+ * Response will provide TrainCrossing objects
+ * @author Dayna
+ *
+ */
 @RestController
-@RequestMapping("/api/traincrossings")
+@RequestMapping("/api")
 public class TrainCrossingController extends BaseController {
 	
 	@Autowired
@@ -29,7 +39,7 @@ public class TrainCrossingController extends BaseController {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	@RequestMapping(value="/traincrossings/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public RestResponse<TrainCrossing> getTrainCrossingById(@PathVariable("id") Long id) throws ResourceNotFoundException{
 		TrainCrossing tc = trainCrossingService.getTrainCrossing(id);
@@ -48,4 +58,22 @@ public class TrainCrossingController extends BaseController {
 		Page<TrainCrossing> allCrossings = trainCrossingService.getAllTrainCrossings(new PageRequest(page, size));
 		return new PageResponse<TrainCrossing>(allCrossings);
 	}	
+	
+	/**
+	 * Find all train crossings nearby
+	 * @param radius
+	 * @return
+	 */
+	@RequestMapping(value="/nearby/traincrossings", method = RequestMethod.GET)
+	@ResponseBody
+	public CollectionResponse<TrainCrossing> getNearbyTrainCrossings(@RequestParam(required=false, value = RADIUS_PARAM) Integer radius){
+		
+		if(radius == null){
+			radius = DEFAULT_RADIUS; 	// set a default radius (100)
+		}
+		
+		User user = getCurrentUser();
+		List<TrainCrossing> nearby = trainCrossingService.getTrainCrossingsNearby(user, radius);
+		return new CollectionResponse<TrainCrossing>(nearby);		
+	}
 }
