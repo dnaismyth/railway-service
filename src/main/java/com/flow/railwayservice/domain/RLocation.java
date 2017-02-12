@@ -72,8 +72,8 @@ public class RLocation {
 		return point;
 	}
 	
-	public void setJpaPoint(Point point){
-		this.point = new JpaPoint(point);
+	public void setJpaPoint(double x, double y){
+		this.point = new JpaPoint(x, y);
 	}
 	
 }

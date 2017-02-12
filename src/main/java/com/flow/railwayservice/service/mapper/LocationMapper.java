@@ -26,7 +26,8 @@ public class LocationMapper {
 			l.setProvince(rl.getProvince());
 			l.setCity(rl.getCity());
 			l.setRegion(rl.getRegion());
-			//TODO: Set latitude and longitude
+			l.setLatitude(rl.getPoint().getX());
+			l.setLongitude(rl.getPoint().getY());
 		}
 		return l;
 	}
@@ -44,8 +45,7 @@ public class LocationMapper {
 			rl.setCity(l.getCity());
 			rl.setProvince(rl.getProvince());
 			rl.setRegion(l.getRegion());
-			Point point = LocationUtil.createPointFromCoordinates(l.getLongitude(), l.getLatitude());
-			rl.setJpaPoint(point);
+			rl.setJpaPoint(l.getLatitude(), l.getLongitude());
 		}
 		return rl;
 	}

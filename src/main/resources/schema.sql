@@ -7,6 +7,64 @@ insert into oauth_client_details(client_id, resource_ids, client_secret, scope, 
 refresh_token_validity, autoapprove) values('railwayservice-ios', 'res_railwayservice', 'kJFKCt2EzsW3j2a4', 'read, write', 'password,refresh_token,authorization_code,implicit','ROLE_USER, ROLE_ADMIN',
 3600, 360000, true);
 
+-- Table: public.railway_user
+
+-- DROP TABLE public.railway_user;
+
+CREATE TABLE public.railway_user
+(
+    id bigint NOT NULL DEFAULT nextval('railway_user_id_seq'::regclass),
+    login character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    password_hash character varying(60) COLLATE pg_catalog."default",
+    name character varying(50) COLLATE pg_catalog."default",
+    role_type integer,
+    email character varying(100) COLLATE pg_catalog."default",
+    activated boolean NOT NULL,
+    lang_key character varying(5) COLLATE pg_catalog."default",
+    activation_key character varying(20) COLLATE pg_catalog."default",
+    reset_key character varying(20) COLLATE pg_catalog."default",
+    created_by character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    created_date timestamp without time zone NOT NULL DEFAULT now(),
+    reset_date timestamp without time zone,
+    last_modified_by character varying(50) COLLATE pg_catalog."default",
+    last_modified_date timestamp without time zone,
+    address character varying(255) COLLATE pg_catalog."default",
+    city character varying(255) COLLATE pg_catalog."default",
+    x_coordinate double precision,
+    y_coordinate double precision,
+    province character varying(255) COLLATE pg_catalog."default",
+    region character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT pk_railway_user PRIMARY KEY (id),
+    CONSTRAINT railway_user_email_key UNIQUE (email),
+    CONSTRAINT railway_user_login_key UNIQUE (login),
+    CONSTRAINT uc_railway_useremail_col UNIQUE (email)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.railway_user
+    OWNER to postgres;
+
+-- Index: idx_user_email
+
+-- DROP INDEX public.idx_user_email;
+
+CREATE UNIQUE INDEX idx_user_email
+    ON public.railway_user USING btree
+    (email COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
+
+-- Index: idx_user_login
+
+-- DROP INDEX public.idx_user_login;
+
+CREATE UNIQUE INDEX idx_user_login
+    ON public.railway_user USING btree
+    (login COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
+
 -- Tables
 
 -- Table: public.audio_notification

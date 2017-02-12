@@ -13,6 +13,7 @@ import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.dto.TrainCrossing;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
+import com.flow.railwayservice.repository.TrainCrossingJDBCRepository;
 import com.flow.railwayservice.repository.TrainCrossingRepository;
 import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
@@ -23,6 +24,9 @@ public class TrainCrossingService extends ServiceBase {
 	
 	@Autowired
 	private TrainCrossingRepository trainCrossingRepo;
+	
+	@Autowired
+	private TrainCrossingJDBCRepository trainCrossingJDBCRepo;
 	
 	private TrainCrossingMapper trainCrossingMapper = new TrainCrossingMapper();
 
@@ -47,8 +51,10 @@ public class TrainCrossingService extends ServiceBase {
 	public List<TrainCrossing> getTrainCrossingsNearby(User user, int radius){
 		RestPreconditions.checkNotNull(user);
 		RestPreconditions.checkNotNull(radius);
+		double latitude = user.getLocation().getLatitude();
+		double longitude = user.getLocation().getLongitude();
 		
-		List<TrainCrossing> nearbyTrainCrossings = new ArrayList<TrainCrossing>();
+		List<TrainCrossing> nearbyTrainCrossings = trainCrossingJDBCRepo.findNearbyTrainCrossings(latitude, longitude, radius);
 		return nearbyTrainCrossings;
 	}
 	

@@ -27,7 +27,7 @@ public class UserController extends BaseController {
 	 * @return
 	 * @throws ResourceNotFoundException 
 	 */
-	@RequestMapping(value = "/user/location", method = RequestMethod.PUT)
+	@RequestMapping(value = "/users/location", method = RequestMethod.PUT)
 	@ResponseBody
 	public RestResponse<User> updateMyLocation(@RequestBody final Location location) throws ResourceNotFoundException{
 		User user = getCurrentUser();
