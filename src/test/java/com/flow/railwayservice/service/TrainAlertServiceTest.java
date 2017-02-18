@@ -63,7 +63,7 @@ public class TrainAlertServiceTest extends BaseServiceTest {
 		tc.setRailway("CN");
 		TrainCrossing created = trainCrossingService.createTrainCrossing(tc);
 		trainCrossingIds.add(created.getId());
-		Long addedId = trainAlertService.markTrainCrossingAsAlert(user, created.getId());
+		Long addedId = trainAlertService.markTrainCrossingAsAlert(user, created.getId(), null);
 		Assert.assertEquals(created.getId(), addedId);
 	}
 	
@@ -73,7 +73,7 @@ public class TrainAlertServiceTest extends BaseServiceTest {
 		tc.setRailway("CN");
 		TrainCrossing created = trainCrossingService.createTrainCrossing(tc);
 		trainCrossingIds.add(created.getId());
-		Long addedId = trainAlertService.markTrainCrossingAsAlert(user, created.getId());
+		Long addedId = trainAlertService.markTrainCrossingAsAlert(user, created.getId(), null);
 		Assert.assertEquals(created.getId(), addedId);
 		Page<TrainAlert> alerts = trainAlertService.findUserTrainCrossingAlertPreferences(user.getId(), new PageRequest(0,5));
 		Assert.assertEquals(1, alerts.getContent().size());

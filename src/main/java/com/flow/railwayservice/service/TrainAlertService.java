@@ -5,15 +5,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.flow.railwayservice.domain.RAudioNotification;
 import com.flow.railwayservice.domain.RTrainAlert;
 import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.domain.UserTrainCrossingPK;
+import com.flow.railwayservice.dto.AudioNotification;
 import com.flow.railwayservice.dto.TrainAlert;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.BadRequestException;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
+import com.flow.railwayservice.repository.AudioNotificationRepository;
 import com.flow.railwayservice.repository.TrainAlertRepository;
+import com.flow.railwayservice.service.mapper.AudioNotificationMapper;
 import com.flow.railwayservice.service.mapper.TrainAlertMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
 
@@ -22,6 +26,11 @@ public class TrainAlertService extends ServiceBase {
 	
 	@Autowired
 	private TrainAlertRepository trainAlertRepo;
+	
+	@Autowired
+	private AudioNotificationRepository audioRepository;
+	
+	private AudioNotificationMapper audioMapper = new AudioNotificationMapper();
 	
 	private TrainAlertMapper trainAlertMapper = new TrainAlertMapper();
 
@@ -32,7 +41,7 @@ public class TrainAlertService extends ServiceBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public Long markTrainCrossingAsAlert(User user, Long trainCrossingId) throws Exception {
+	public Long markTrainCrossingAsAlert(User user, Long trainCrossingId, Long audioId) throws Exception {
 		RestPreconditions.checkNotNull(user);
 		RestPreconditions.checkNotNull(trainCrossingId);
 		RUser ru = loadUserEntity(user.getId());
@@ -42,8 +51,8 @@ public class TrainAlertService extends ServiceBase {
 		if(exists != null){
 			throw new BadRequestException("You have already added this train crossing to your alerts.");
 		}
-		
-		trainAlertRepo.save(new RTrainAlert(pk, null));
+		RAudioNotification ra = audioRepository.findOne(audioId);
+		trainAlertRepo.save(new RTrainAlert(pk, ra));
 		return trainCrossingId;
 		
 	}
