@@ -52,7 +52,7 @@ public class TrainCrossingController extends BaseController {
 	 * @param size
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="/traincrossings", method = RequestMethod.GET)
 	@ResponseBody
 	public PageResponse<TrainCrossing> getAllTrainCrossings(@RequestParam(PAGE_PARAM) int page, @RequestParam(SIZE_PARAM) int size){
 		Page<TrainCrossing> allCrossings = trainCrossingService.getAllTrainCrossings(new PageRequest(page, size));

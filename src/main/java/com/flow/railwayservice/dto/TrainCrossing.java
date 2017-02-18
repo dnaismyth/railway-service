@@ -1,7 +1,14 @@
 package com.flow.railwayservice.dto;
 
-public class TrainCrossing {
+import java.io.Serializable;
 
+public class TrainCrossing implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public Long id;
 	public String railway;
 	public Location location;
