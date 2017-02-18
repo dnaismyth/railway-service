@@ -12,12 +12,13 @@ import com.flow.railwayservice.domain.UserTrainCrossingPK;
 import com.flow.railwayservice.dto.TrainAlert;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.BadRequestException;
+import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.repository.TrainAlertRepository;
 import com.flow.railwayservice.service.mapper.TrainAlertMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
 
 @Service
-public class TrainCrossingAlertService extends ServiceBase {
+public class TrainAlertService extends ServiceBase {
 	
 	@Autowired
 	private TrainAlertRepository trainAlertRepo;
@@ -45,6 +46,27 @@ public class TrainCrossingAlertService extends ServiceBase {
 		trainAlertRepo.save(new RTrainAlert(pk, null));
 		return trainCrossingId;
 		
+	}
+	
+	/**
+	 * Remove train crossing from alerts
+	 * @param userId
+	 * @param trainCrossingId
+	 * @return
+	 * @throws ResourceNotFoundException
+	 */
+	public boolean removeTrainCrossingFromAlerts(Long userId, Long trainCrossingId) throws ResourceNotFoundException{
+		RestPreconditions.checkNotNull(userId);
+		RestPreconditions.checkNotNull(trainCrossingId);
+		RUser ru = loadUserEntity(userId);
+		RTrainCrossing rtc = loadTrainCrossing(trainCrossingId);
+		UserTrainCrossingPK pk = new UserTrainCrossingPK(ru, rtc);
+		if(!trainAlertRepo.exists(pk)){
+			return false;
+		}
+		
+		trainAlertRepo.delete(pk);
+		return true;
 	}
 	
 	/**

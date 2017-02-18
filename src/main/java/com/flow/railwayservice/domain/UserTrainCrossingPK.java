@@ -19,6 +19,8 @@ public class UserTrainCrossingPK implements Serializable {
 	@ManyToOne
 	private RTrainCrossing trainCrossing;
 	
+	public UserTrainCrossingPK(){}
+	
 	public UserTrainCrossingPK(RUser user, RTrainCrossing trainCrossing){
 		this.user = user;
 		this.trainCrossing = trainCrossing;

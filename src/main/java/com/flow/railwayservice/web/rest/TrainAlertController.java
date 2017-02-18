@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flow.railwayservice.dto.TrainAlert;
 import com.flow.railwayservice.dto.User;
-import com.flow.railwayservice.service.TrainCrossingAlertService;
+import com.flow.railwayservice.service.TrainAlertService;
 import com.flow.railwayservice.web.rest.vm.PageResponse;
 
 @RequestMapping("/api")
@@ -20,7 +20,7 @@ import com.flow.railwayservice.web.rest.vm.PageResponse;
 public class TrainAlertController extends BaseController {
 	
 	@Autowired
-	private TrainCrossingAlertService trainAlertService;
+	private TrainAlertService trainAlertService;
 
 	/**
 	 * Find user train alert notification preferences
