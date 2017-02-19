@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.dto.TrainCrossing;
-import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.repository.TrainCrossingJDBCRepository;
 import com.flow.railwayservice.repository.TrainCrossingRepository;
@@ -48,11 +47,10 @@ public class TrainCrossingService extends ServiceBase {
 	 * @param radius
 	 * @return
 	 */
-	public List<TrainCrossing> getTrainCrossingsNearby(User user, int radius){
-		RestPreconditions.checkNotNull(user);
+	public List<TrainCrossing> getTrainCrossingsNearby(double latitude, double longitude, int radius){
 		RestPreconditions.checkNotNull(radius);
-		double latitude = user.getLocation().getLatitude();
-		double longitude = user.getLocation().getLongitude();
+		RestPreconditions.checkNotNull(latitude);
+		RestPreconditions.checkNotNull(longitude);
 		
 		List<TrainCrossing> nearbyTrainCrossings = trainCrossingJDBCRepo.findNearbyTrainCrossings(latitude, longitude, radius);
 		return nearbyTrainCrossings;
