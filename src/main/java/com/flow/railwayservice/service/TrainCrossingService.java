@@ -65,8 +65,9 @@ public class TrainCrossingService extends ServiceBase {
 	 */
 	public Page<TrainCrossing> getAllTrainCrossings(Pageable pageable){
 		RestPreconditions.checkNotNull(pageable);
-		Page<RTrainCrossing> allTrainCrossings = trainCrossingRepo.findAll(pageable);
-		return trainCrossingMapper.toRTrainCrossing(allTrainCrossings, pageable);
+		//Page<RTrainCrossing> allTrainCrossings = trainCrossingRepo.findAll(pageable);
+		Page<RTrainCrossing> allBCTrainCrossings = trainCrossingRepo.findAllTrainCrossingsInBC(pageable);
+		return trainCrossingMapper.toRTrainCrossing(allBCTrainCrossings, pageable);
 	}
 	
 	/**

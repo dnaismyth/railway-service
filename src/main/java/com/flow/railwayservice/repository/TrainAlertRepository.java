@@ -14,6 +14,6 @@ public interface TrainAlertRepository extends JpaRepository<RTrainAlert, UserTra
 	@Query("SELECT rt FROM RTrainAlert rt WHERE rt.userTrainCrossingPK.user.id = ?1")
 	public Page<RTrainAlert> findUserTrainCrossingAlertPreferences(Long userId, Pageable pageable);
 	
-	@Query("SELECT count(*) FROM RTrainAlert rt WHERE rt.user.trainCrossingPK.user.id = ?1")
+	@Query("SELECT count(*) FROM RTrainAlert rt WHERE rt.userTrainCrossingPK.user.id = ?1")
 	public Long countUserTrainCrossingAlerts(Long userId); 
 }

@@ -115,3 +115,20 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.train_alert
     OWNER to postgres;
+    
+    
+-- Updates --
+
+-- Column: public.railway_user.device_token
+
+-- ALTER TABLE public.railway_user DROP COLUMN device_token;
+
+ALTER TABLE public.railway_user
+    ADD COLUMN device_token character varying(255) COLLATE pg_catalog."default";
+    
+-- Column: public.railway_user.platform
+
+-- ALTER TABLE public.railway_user DROP COLUMN platform;
+
+ALTER TABLE public.railway_user
+    ADD COLUMN platform character varying(255) COLLATE pg_catalog."default";

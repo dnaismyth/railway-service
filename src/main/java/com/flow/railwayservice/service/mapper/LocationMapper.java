@@ -26,8 +26,10 @@ public class LocationMapper {
 			l.setProvince(rl.getProvince());
 			l.setCity(rl.getCity());
 			l.setRegion(rl.getRegion());
-			l.setLatitude(rl.getPoint().getX());
-			l.setLongitude(rl.getPoint().getY());
+			if(rl.getPoint() != null){
+				l.setLatitude(rl.getPoint().getX());
+				l.setLongitude(rl.getPoint().getY());
+			}
 		}
 		return l;
 	}

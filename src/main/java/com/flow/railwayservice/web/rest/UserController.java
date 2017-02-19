@@ -69,7 +69,7 @@ public class UserController extends BaseController {
 	 */
 	private Platform getUserPlatform(String clientId){
 		switch(clientId){
-		case "railwayservice-ios":
+		case "railwayservice-ios":		// only support ios currently
 			return Platform.APNS;
 		default:
 			return Platform.WEB;
