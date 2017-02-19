@@ -16,6 +16,7 @@ import com.flow.railwayservice.dto.AudioNotification;
 import com.flow.railwayservice.dto.OperationType;
 import com.flow.railwayservice.dto.TrainAlert;
 import com.flow.railwayservice.dto.User;
+import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.service.TrainAlertService;
 import com.flow.railwayservice.web.rest.vm.PageResponse;
 import com.flow.railwayservice.web.rest.vm.RestResponse;
@@ -58,5 +59,22 @@ public class TrainAlertController extends BaseController {
 		Long audioId = notification.getId();
 		Long trainCrossingId = trainAlertService.markTrainCrossingAsAlert(user, id, audioId);
 		return new RestResponse<Long>(trainCrossingId, OperationType.CREATE);
+	}
+	
+	/**
+	 * Allow for a user to remove a train crossing from alerts
+	 * @param id
+	 * @return
+	 * @throws ResourceNotFoundException
+	 */
+	@RequestMapping(value = "/traincrossings/{id}/trainalerts", method = RequestMethod.DELETE)
+	@ResponseBody
+	public RestResponse<Long> removeTrainCrossingFromAlerts(@PathVariable("id") Long id) throws ResourceNotFoundException{
+		User user = getCurrentUser();
+		boolean removed = trainAlertService.removeTrainCrossingFromAlerts(user.getId(), id);
+		if(removed){
+			return new RestResponse<Long>(id, OperationType.DELETE);
+		}
+		return new RestResponse<Long>(id, OperationType.NO_CHANGE);
 	}
 }

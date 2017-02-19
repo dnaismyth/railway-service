@@ -44,6 +44,10 @@ public class TrainAlertService extends ServiceBase {
 	public Long markTrainCrossingAsAlert(User user, Long trainCrossingId, Long audioId) throws Exception {
 		RestPreconditions.checkNotNull(user);
 		RestPreconditions.checkNotNull(trainCrossingId);
+		Long count = trainAlertRepo.countUserTrainCrossingAlerts(user.getId());
+		if(count > 5){
+			throw new BadRequestException("You are only allowed to receive a maximum of five train alerts.");
+		}
 		RUser ru = loadUserEntity(user.getId());
 		RTrainCrossing rtc = loadTrainCrossing(trainCrossingId);
 		UserTrainCrossingPK pk = new UserTrainCrossingPK(ru, rtc);

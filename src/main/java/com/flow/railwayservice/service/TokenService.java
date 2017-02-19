@@ -75,6 +75,18 @@ public class TokenService {
 		}
 		return values;
 	}
+	
+	public String decodeClientId(String authorization){
+		String values [] = new String[2];
+		if (authorization != null && authorization.startsWith(BASIC_AUTH)) {
+			// Authorization: Basic base64credentials
+			String base64Credentials = authorization.substring(BASIC_AUTH.length()).trim();
+			String credentials = new String(Base64.getDecoder().decode(base64Credentials), Charset.forName("UTF-8"));
+			// credentials = username:password
+			values = credentials.split(":", 2);
+		}
+		return values[0];
+	}
 
      public DefaultTokenServices createDefaultTokenServices() throws Exception {
      	DefaultTokenServices tokenServices = new DefaultTokenServices();

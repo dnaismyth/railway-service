@@ -1,5 +1,6 @@
 package com.flow.railwayservice.domain;
 
+import com.flow.railwayservice.dto.Platform;
 import com.flow.railwayservice.dto.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
@@ -70,6 +71,13 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     
     @Embedded
     private RLocation location;
+    
+    @Column(name="device_token")
+    private String deviceToken;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name="platform")
+    private Platform platform;
 
     public Long getId() {
         return id;
@@ -165,6 +173,22 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     
     public void setLocation(RLocation location){
     	this.location = location;
+    }
+    
+    public String getDeviceToken(){
+    	return deviceToken;
+    }
+    
+    public void setDeviceToken(String deviceToken){
+    	this.deviceToken = deviceToken;
+    }
+    
+    public Platform getPlatform(){
+    	return platform;
+    }
+    
+    public void setPlatform(Platform platform){
+    	this.platform = platform;
     }
 
     @Override

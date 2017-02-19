@@ -3,6 +3,7 @@ package com.flow.railwayservice.service;
 import com.flow.railwayservice.domain.RLocation;
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.dto.Location;
+import com.flow.railwayservice.dto.Platform;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.dto.UserRole;
 import com.flow.railwayservice.exception.BadRequestException;
@@ -276,6 +277,41 @@ public class UserService extends ServiceBase {
     	RUser ru = userMapper.toRUser(user);
     	RUser created = userRepository.save(ru);
     	return userMapper.toUser(created);
+    }
+    
+    /**
+     * Update a user's device token and platform (APNS, GCM.. etc)
+     * @param user
+     * @param deviceToken
+     * @param platform
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    public User updateUserDeviceAndPlatform(User user, String deviceToken, Platform platform) throws ResourceNotFoundException{
+    	RestPreconditions.checkNotNull(user);
+    	RestPreconditions.checkNotNull(deviceToken);
+    	RestPreconditions.checkNotNull(platform);
+    	
+    	boolean dirty = false;
+    	RUser ru = loadUserEntity(user.getId());
+    	if(!CompareUtil.compare(ru.getDeviceToken(), deviceToken)){
+    		ru.setDeviceToken(deviceToken);
+    		dirty = true;
+    	}
+    	
+    	if(!CompareUtil.compare(ru.getPlatform(), platform)){
+    		ru.setPlatform(platform);
+    		if(!dirty){
+    			dirty = true;
+    		}
+    	}
+    	
+    	if(dirty){
+    		RUser saved = userRepository.save(ru);
+    		return userMapper.toUser(saved);
+    	}
+    	
+    	return user;
     }
   
 }
