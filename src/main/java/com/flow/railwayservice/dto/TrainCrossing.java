@@ -9,9 +9,10 @@ public class TrainCrossing implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public Long id;
-	public String railway;
-	public Location location;
+	private Long id;
+	private String railway;
+	private Location location;
+	private Boolean isMarkedForAlerts = false;
 	
 	public TrainCrossing(){}
 	
@@ -37,5 +38,13 @@ public class TrainCrossing implements Serializable {
 	
 	public void setLocation(Location location){
 		this.location = location;
+	}
+	
+	public Boolean isMarkedForAlerts(){
+		return isMarkedForAlerts;
+	}
+	
+	public void setIsMarkedForAlerts(Boolean isMarkedForAlerts){
+		this.isMarkedForAlerts = isMarkedForAlerts;
 	}
 }

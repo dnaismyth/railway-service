@@ -1,5 +1,8 @@
 package com.flow.railwayservice.repository;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +19,8 @@ public interface TrainAlertRepository extends JpaRepository<RTrainAlert, UserTra
 	
 	@Query("SELECT count(*) FROM RTrainAlert rt WHERE rt.userTrainCrossingPK.user.id = ?1")
 	public Long countUserTrainCrossingAlerts(Long userId); 
+	
+	@Query("SELECT rt.userTrainCrossingPK.trainCrossing.id FROM RTrainAlert rt WHERE rt.userTrainCrossingPK.user.id = ?1"
+			+ " AND rt.userTrainCrossingPK.trainCrossing.id IN (?2)")
+	public List<Long> flagUserTrainAlertsByTrainCrossingIds(Long userId, Set<Long> trainCrossingIds);
 }

@@ -69,12 +69,12 @@ public class TrainCrossingController extends BaseController {
 	public CollectionResponse<TrainCrossing> getNearbyTrainCrossings(@RequestParam(required=false, value = RADIUS_PARAM) Integer radius,
 			@RequestParam(required=true, value = LAT_PARAM) Double latitude,
 			@RequestParam(required = true, value = LON_PARAM) Double longitude){
-		
+		User user = getCurrentUser();
 		if(radius == null){
 			radius = DEFAULT_RADIUS; 	// set a default radius (100)
 		}
 		
-		List<TrainCrossing> nearby = trainCrossingService.getTrainCrossingsNearby(latitude, longitude, radius);
+		List<TrainCrossing> nearby = trainCrossingService.getTrainCrossingsNearby(user, latitude, longitude, radius);
 		return new CollectionResponse<TrainCrossing>(nearby);		
 	}
 }
