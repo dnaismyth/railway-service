@@ -280,17 +280,19 @@ public class UserService extends ServiceBase {
     }
     
     /**
-     * Update a user's device token and platform (APNS, GCM.. etc)
+     * Update the user's device token, FCM token (notifications) and Platform
      * @param user
      * @param deviceToken
+     * @param fcmToken
      * @param platform
      * @return
      * @throws ResourceNotFoundException
      */
-    public User updateUserDeviceAndPlatform(User user, String deviceToken, Platform platform) throws ResourceNotFoundException{
+    public User updateUserTokensAndPlatform(User user, String deviceToken, String fcmToken, Platform platform) throws ResourceNotFoundException{
     	RestPreconditions.checkNotNull(user);
     	RestPreconditions.checkNotNull(deviceToken);
     	RestPreconditions.checkNotNull(platform);
+    	RestPreconditions.checkNotNull(fcmToken);
     	
     	boolean dirty = false;
     	RUser ru = loadUserEntity(user.getId());
@@ -301,6 +303,13 @@ public class UserService extends ServiceBase {
     	
     	if(!CompareUtil.compare(ru.getPlatform(), platform)){
     		ru.setPlatform(platform);
+    		if(!dirty){
+    			dirty = true;
+    		}
+    	}
+    	
+    	if(!CompareUtil.compare(ru.getFcmToken(), fcmToken)){
+    		ru.setFcmToken(fcmToken);
     		if(!dirty){
     			dirty = true;
     		}

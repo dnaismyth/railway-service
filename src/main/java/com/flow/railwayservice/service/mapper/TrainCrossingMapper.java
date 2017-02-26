@@ -33,6 +33,7 @@ public class TrainCrossingMapper {
 			tc.setId(rtc.getId());
 			tc.setRailway(rtc.getRailway());
 			tc.setLocation(locationMapper.toLocation(rtc.getLocation()));
+			tc.setNotificationTopic(rtc.getNotificationTopic());
 		}
 		return tc;
 	}
@@ -49,6 +50,7 @@ public class TrainCrossingMapper {
 			rtc.setId(tc.getId());
 			rtc.setLocation(locationMapper.toRLocation(tc.getLocation()));
 			rtc.setRailway(tc.getRailway());
+			rtc.setNotificationTopic(tc.getNotificationTopic());
 		}
 		return rtc;
 	}

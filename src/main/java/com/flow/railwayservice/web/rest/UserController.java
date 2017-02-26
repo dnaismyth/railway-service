@@ -17,7 +17,7 @@ import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.service.TokenService;
 import com.flow.railwayservice.service.UserService;
-import com.flow.railwayservice.web.rest.vm.PlatformDeviceRequest;
+import com.flow.railwayservice.web.rest.vm.TokenPlatformRequest;
 import com.flow.railwayservice.web.rest.vm.RestResponse;
 import com.flow.railwayservice.web.rest.vm.SimpleRequest;
 
@@ -52,11 +52,11 @@ public class UserController extends BaseController {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	@RequestMapping(value = "/users/devicetoken", method = RequestMethod.PUT)
+	@RequestMapping(value = "/users/resources/tokens", method = RequestMethod.PUT)
 	@ResponseBody
-	public RestResponse<User> updateMyDeviceToken(@RequestBody final PlatformDeviceRequest req) throws ResourceNotFoundException{
+	public RestResponse<User> updateTokensAndPlatform(@RequestBody final TokenPlatformRequest req) throws ResourceNotFoundException{
 		User user = getCurrentUser();
-		User updated = userService.updateUserDeviceAndPlatform(user, req.getDeviceToken(), req.getPlatform());
+		User updated = userService.updateUserTokensAndPlatform(user, req.getDeviceToken(), req.getFcmToken(), req.getPlatform());
 		return new RestResponse<User>(updated, OperationType.UPDATE);
 	}
 }

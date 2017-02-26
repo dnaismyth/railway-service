@@ -67,6 +67,40 @@ CREATE UNIQUE INDEX idx_user_login
 
 -- Tables
 
+-- Table: public.train_crossing
+
+-- DROP TABLE public.train_crossing;
+
+CREATE TABLE public.train_crossing
+(
+    id bigint NOT NULL,
+    address character varying(255) COLLATE pg_catalog."default",
+    city character varying(255) COLLATE pg_catalog."default",
+    x_coordinate double precision,
+    y_coordinate double precision,
+    province character varying(255) COLLATE pg_catalog."default",
+    region character varying(255) COLLATE pg_catalog."default",
+    railway character varying(255) COLLATE pg_catalog."default",
+    notification_topic character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT train_crossing_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.train_crossing
+    OWNER to postgres;
+
+-- Index: train_crossing_topic_idx
+
+-- DROP INDEX public.train_crossing_topic_idx;
+
+CREATE INDEX train_crossing_topic_idx
+    ON public.train_crossing USING btree
+    (notification_topic COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
+
 -- Table: public.audio_notification
 
 -- DROP TABLE public.audio_notification;
@@ -132,3 +166,10 @@ ALTER TABLE public.railway_user
 
 ALTER TABLE public.railway_user
     ADD COLUMN platform character varying(255) COLLATE pg_catalog."default";
+    
+-- Column: public.railway_user.fcm_token
+
+-- ALTER TABLE public.railway_user DROP COLUMN fcm_token;
+
+ALTER TABLE public.railway_user
+    ADD COLUMN fcm_token character varying(255) COLLATE pg_catalog."default";

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 /**
@@ -16,7 +17,9 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="train_crossing")
+@Table(name="train_crossing", indexes={
+	@Index(name="train_crossing_topic_idx", columnList="notification_topic")
+})
 public class RTrainCrossing implements Serializable {
 	
 	/**
@@ -33,6 +36,13 @@ public class RTrainCrossing implements Serializable {
 	
 	@Embedded
 	private RLocation location;
+	
+	/**
+	 * The topic name that users will subscribe to to
+	 * receive notifications about this particular train crossing.
+	 */
+	@Column(name="notification_topic")
+	private String notificationTopic;
 	
 	public RTrainCrossing(){}
 
@@ -58,6 +68,14 @@ public class RTrainCrossing implements Serializable {
 
 	public void setLocation(RLocation location) {
 		this.location = location;
+	}
+	
+	public String getNotificationTopic(){
+		return notificationTopic;
+	}
+	
+	public void setNotificationTopic(String notificationTopic){
+		this.notificationTopic = notificationTopic;
 	}
 	
 }

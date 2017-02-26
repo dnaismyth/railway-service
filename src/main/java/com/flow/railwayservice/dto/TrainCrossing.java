@@ -13,6 +13,7 @@ public class TrainCrossing implements Serializable {
 	private String railway;
 	private Location location;
 	private Boolean isMarkedForAlerts = false;
+	private String notificationTopic;
 	
 	public TrainCrossing(){}
 	
@@ -46,5 +47,13 @@ public class TrainCrossing implements Serializable {
 	
 	public void setIsMarkedForAlerts(Boolean isMarkedForAlerts){
 		this.isMarkedForAlerts = isMarkedForAlerts;
+	}
+	
+	public String getNotificationTopic(){
+		return notificationTopic;
+	}
+	
+	public void setNotificationTopic(String notificationTopic){
+		this.notificationTopic = notificationTopic;
 	}
 }

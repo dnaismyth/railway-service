@@ -75,6 +75,9 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     @Column(name="device_token")
     private String deviceToken;
     
+    @Column(name="fcm_token")
+    private String fcmToken;
+    
     @Enumerated(EnumType.STRING)
     @Column(name="platform")
     private Platform platform;
@@ -191,7 +194,15 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     	this.platform = platform;
     }
 
-    @Override
+    public String getFcmToken() {
+		return fcmToken;
+	}
+
+	public void setFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
