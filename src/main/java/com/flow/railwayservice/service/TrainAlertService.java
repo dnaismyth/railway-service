@@ -12,6 +12,7 @@ import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.domain.UserTrainCrossingPK;
 import com.flow.railwayservice.dto.AudioNotification;
 import com.flow.railwayservice.dto.TrainAlert;
+import com.flow.railwayservice.dto.TrainCrossing;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.BadRequestException;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
@@ -19,6 +20,7 @@ import com.flow.railwayservice.repository.AudioNotificationRepository;
 import com.flow.railwayservice.repository.TrainAlertRepository;
 import com.flow.railwayservice.service.mapper.AudioNotificationMapper;
 import com.flow.railwayservice.service.mapper.TrainAlertMapper;
+import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
 
 @Service
@@ -33,6 +35,7 @@ public class TrainAlertService extends ServiceBase {
 	private AudioNotificationMapper audioMapper = new AudioNotificationMapper();
 	
 	private TrainAlertMapper trainAlertMapper = new TrainAlertMapper();
+	private TrainCrossingMapper trainMapper = new TrainCrossingMapper();
 
 	/**
 	 * Allow for a user to request alerts for a specified train crossing
@@ -41,7 +44,7 @@ public class TrainAlertService extends ServiceBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public Long markTrainCrossingAsAlert(User user, Long trainCrossingId, Long audioId) throws Exception {
+	public TrainCrossing markTrainCrossingAsAlert(User user, Long trainCrossingId, Long audioId) throws Exception {
 		RestPreconditions.checkNotNull(user);
 		RestPreconditions.checkNotNull(trainCrossingId);
 		Long count = trainAlertRepo.countUserTrainCrossingAlerts(user.getId());
@@ -57,7 +60,7 @@ public class TrainAlertService extends ServiceBase {
 		}
 		RAudioNotification ra = audioRepository.findOne(audioId);
 		trainAlertRepo.save(new RTrainAlert(pk, ra));
-		return trainCrossingId;
+		return trainMapper.toTrainCrossing(rtc);
 		
 	}
 	
@@ -68,18 +71,18 @@ public class TrainAlertService extends ServiceBase {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	public boolean removeTrainCrossingFromAlerts(Long userId, Long trainCrossingId) throws ResourceNotFoundException{
+	public TrainCrossing removeTrainCrossingFromAlerts(Long userId, Long trainCrossingId) throws ResourceNotFoundException{
 		RestPreconditions.checkNotNull(userId);
 		RestPreconditions.checkNotNull(trainCrossingId);
 		RUser ru = loadUserEntity(userId);
 		RTrainCrossing rtc = loadTrainCrossing(trainCrossingId);
 		UserTrainCrossingPK pk = new UserTrainCrossingPK(ru, rtc);
 		if(!trainAlertRepo.exists(pk)){
-			return false;
+			return null;
 		}
 		
 		trainAlertRepo.delete(pk);
-		return true;
+		return trainMapper.toTrainCrossing(rtc);
 	}
 	
 	/**

@@ -1,8 +1,6 @@
 package com.flow.railwayservice.web.rest;
 
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,14 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flow.railwayservice.dto.Location;
 import com.flow.railwayservice.dto.OperationType;
-import com.flow.railwayservice.dto.Platform;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.service.TokenService;
 import com.flow.railwayservice.service.UserService;
 import com.flow.railwayservice.web.rest.vm.TokenPlatformRequest;
 import com.flow.railwayservice.web.rest.vm.RestResponse;
-import com.flow.railwayservice.web.rest.vm.SimpleRequest;
 
 @RestController
 @RequestMapping("/api")

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flow.railwayservice.dto.AudioNotification;
 import com.flow.railwayservice.dto.OperationType;
 import com.flow.railwayservice.dto.TrainAlert;
+import com.flow.railwayservice.dto.TrainCrossing;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.service.TrainAlertService;
@@ -53,12 +54,12 @@ public class TrainAlertController extends BaseController {
 	 */
 	@RequestMapping(value = "/traincrossings/{id}/trainalerts", method = RequestMethod.POST)
 	@ResponseBody
-	public RestResponse<Long> addTrainCrossingToAlerts(@PathVariable("id") Long id, 
+	public RestResponse<TrainCrossing> addTrainCrossingToAlerts(@PathVariable("id") Long id, 
 			@RequestBody final AudioNotification notification) throws Exception{
 		User user = getCurrentUser();
 		Long audioId = notification.getId();
-		Long trainCrossingId = trainAlertService.markTrainCrossingAsAlert(user, id, audioId);
-		return new RestResponse<Long>(trainCrossingId, OperationType.CREATE);
+		TrainCrossing tc = trainAlertService.markTrainCrossingAsAlert(user, id, audioId);
+		return new RestResponse<TrainCrossing>(tc, OperationType.CREATE);
 	}
 	
 	/**
@@ -69,12 +70,12 @@ public class TrainAlertController extends BaseController {
 	 */
 	@RequestMapping(value = "/traincrossings/{id}/trainalerts", method = RequestMethod.DELETE)
 	@ResponseBody
-	public RestResponse<Long> removeTrainCrossingFromAlerts(@PathVariable("id") Long id) throws ResourceNotFoundException{
+	public RestResponse<TrainCrossing> removeTrainCrossingFromAlerts(@PathVariable("id") Long id) throws ResourceNotFoundException{
 		User user = getCurrentUser();
-		boolean removed = trainAlertService.removeTrainCrossingFromAlerts(user.getId(), id);
-		if(removed){
-			return new RestResponse<Long>(id, OperationType.DELETE);
+		TrainCrossing tc = trainAlertService.removeTrainCrossingFromAlerts(user.getId(), id);
+		if(tc != null){
+			return new RestResponse<TrainCrossing>(tc, OperationType.DELETE);
 		}
-		return new RestResponse<Long>(id, OperationType.NO_CHANGE);
+		return new RestResponse<TrainCrossing>(tc, OperationType.NO_CHANGE);
 	}
 }

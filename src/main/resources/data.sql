@@ -21113,3 +21113,7 @@ INSERT INTO train_crossing(id,railway,region,province,address,x_coordinate,y_coo
 INSERT INTO train_crossing(id,railway,region,province,address,x_coordinate,y_coordinate,city) VALUES (21113,'CP','PNR','SK','21-22-29-11',51.5011,-107.48015,'MILDEN NO. 286');
 INSERT INTO train_crossing(id,railway,region,province,address,x_coordinate,y_coordinate,city) VALUES (21114,'CP','PNR','SK','22-27-29-11',51.50251,-107.4771,'MILDEN NO. 286');
 INSERT INTO train_crossing(id,railway,region,province,address,x_coordinate,y_coordinate,city) VALUES (21115,'CP','PNR','SK','SEC8-37-11-W2M',52.1672,-103.5532,'KELVINGTON NO. 366');
+
+-- Set unique notification topic
+update train_crossing set notification_topic = CONCAT(id, '_', province);
+
