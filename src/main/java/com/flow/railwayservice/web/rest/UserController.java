@@ -17,6 +17,7 @@ import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.exception.ResourceNotFoundException;
 import com.flow.railwayservice.service.TokenService;
 import com.flow.railwayservice.service.UserService;
+import com.flow.railwayservice.web.rest.vm.PlatformDeviceRequest;
 import com.flow.railwayservice.web.rest.vm.RestResponse;
 import com.flow.railwayservice.web.rest.vm.SimpleRequest;
 
@@ -53,26 +54,9 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/users/devicetoken", method = RequestMethod.PUT)
 	@ResponseBody
-	public RestResponse<User> updateMyDeviceToken(@RequestBody final SimpleRequest simpleReq, HttpServletRequest req) throws ResourceNotFoundException{
+	public RestResponse<User> updateMyDeviceToken(@RequestBody final PlatformDeviceRequest req) throws ResourceNotFoundException{
 		User user = getCurrentUser();
-		String auth = req.getHeader("Authorization");
-		String clientId = tokenService.decodeClientId(auth);
-		Platform platform = getUserPlatform(clientId);
-		User updated = userService.updateUserDeviceAndPlatform(user, simpleReq.getValue(), platform);
+		User updated = userService.updateUserDeviceAndPlatform(user, req.getDeviceToken(), req.getPlatform());
 		return new RestResponse<User>(updated, OperationType.UPDATE);
-	}
-	
-	/**
-	 * Extract platform from client id
-	 * @param clientId
-	 * @return
-	 */
-	private Platform getUserPlatform(String clientId){
-		switch(clientId){
-		case "railwayservice-ios":		// only support ios currently
-			return Platform.APNS;
-		default:
-			return Platform.WEB;
-		}
 	}
 }

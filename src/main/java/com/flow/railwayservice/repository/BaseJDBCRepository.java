@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-@PropertySource("/sql.properties")
+@PropertySource("classpath:sql.properties")
 public class BaseJDBCRepository {
 
 	@Autowired 
