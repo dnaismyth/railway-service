@@ -12,7 +12,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.flow.railwayservice.dto.Location;
+import com.flow.railwayservice.dto.OperationType;
 import com.flow.railwayservice.dto.TrainCrossing;
+import com.flow.railwayservice.dto.TrainCrossingReport;
 import com.flow.railwayservice.dto.User;
 import com.flow.railwayservice.dto.UserRole;
 import com.flow.railwayservice.exception.BadRequestException;
@@ -73,8 +75,8 @@ public class TrainCrossingReportTest extends BaseServiceTest {
 		tc.setLocation(location);
 		TrainCrossing created = crossingService.createTrainCrossing(tc);
 		trainCrossingIds.add(created.getId());
-		boolean reported = reportService.makeTrainCrossingReport(user.getId(), created.getId());
-		Assert.assertTrue(reported);
+		TrainCrossingReport report = reportService.makeTrainCrossingReport(user.getId(), created.getId());
+		Assert.assertTrue(report.getOperationType().equals(OperationType.CREATE));
 	}
 	
 	@Test
@@ -86,10 +88,10 @@ public class TrainCrossingReportTest extends BaseServiceTest {
 		tc.setLocation(location);
 		TrainCrossing created = crossingService.createTrainCrossing(tc);
 		trainCrossingIds.add(created.getId());
-		boolean reported = reportService.makeTrainCrossingReport(user.getId(), created.getId());
-		Assert.assertTrue(reported);
-		boolean reportAgain = reportService.makeTrainCrossingReport(user.getId(), created.getId());
-		Assert.assertFalse(reportAgain);
+		TrainCrossingReport report = reportService.makeTrainCrossingReport(user.getId(), created.getId());
+		Assert.assertTrue(report.getOperationType().equals(OperationType.CREATE));
+		TrainCrossingReport reportAgain = reportService.makeTrainCrossingReport(user.getId(), created.getId());
+		Assert.assertTrue(reportAgain.getOperationType().equals(OperationType.NO_CHANGE));
 	}
 	
 	@Test
