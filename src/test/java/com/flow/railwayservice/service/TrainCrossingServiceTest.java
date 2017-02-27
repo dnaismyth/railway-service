@@ -54,6 +54,7 @@ public class TrainCrossingServiceTest extends BaseServiceTest {
 	public void testGetAllTrainCrossings(){
 		Location location = new Location();
 		location.setAddress("124 Street");
+		location.setProvince("BC");
 		TrainCrossing tc = new TrainCrossing();
 		tc.setRailway("CN");
 		tc.setLocation(location);
