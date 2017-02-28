@@ -1,12 +1,12 @@
 package com.flow.railwayservice.domain;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
@@ -18,7 +18,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="train_crossing", indexes={
-	@Index(name="train_crossing_topic_idx", columnList="notification_topic")
+	@Index(name="train_crossing_topic_idx", columnList="notification_topic"),
+	@Index(name="train_crossing_active_idx", columnList="flagged_active, time_flagged_active")
 })
 public class RTrainCrossing implements Serializable {
 	
@@ -50,6 +51,12 @@ public class RTrainCrossing implements Serializable {
 	 */
 	@Column(name="flagged_active")
 	private Boolean isFlaggedActive = false;
+	
+	/**
+	 * Store the time in which the train crossing had been marked active
+	 */
+	@Column(name="time_flagged_active")
+	private ZonedDateTime timeFlaggedActive;
 	
 	public RTrainCrossing(){}
 
@@ -91,6 +98,14 @@ public class RTrainCrossing implements Serializable {
 	
 	public void setIsFlaggedActive(Boolean isFlaggedActive){
 		this.isFlaggedActive = isFlaggedActive;
+	}
+	
+	public ZonedDateTime getTimeFlaggedActive(){
+		return timeFlaggedActive;
+	}
+	
+	public void setTimeFlaggedActive(ZonedDateTime timeFlaggedActive){
+		this.timeFlaggedActive = timeFlaggedActive;
 	}
 	
 }

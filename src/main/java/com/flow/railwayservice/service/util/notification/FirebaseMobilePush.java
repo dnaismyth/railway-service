@@ -29,7 +29,7 @@ public class FirebaseMobilePush {
 	private static String apiKey;
 	private static String FCM_SEND_URL;
 	
-	private static final String NOTIFICATION_TITLE = "Train Crossing Alert";
+	private static final String NOTIFICATION_TITLE = "Active Train Crossing Alert";
 	private static final String NOTIFICATION_PRIORITY = "high";
 	//private static final String NOTIFICATION_SOUND = "default";
 
@@ -79,7 +79,6 @@ public class FirebaseMobilePush {
 	}
 
 	public static ResponseEntity<String> sendNotification(String topic, String crossingAddress) {
-		// TODO: Send notification in batches if registrationIds.size > 1000
 		FirebaseMessagingRequest req = buildMessagingRequest(topic, crossingAddress);
 		HttpHeaders headers = buildHeaders();
 		HttpEntity<FirebaseMessagingRequest> request = new HttpEntity<FirebaseMessagingRequest>(req, headers);
@@ -91,8 +90,9 @@ public class FirebaseMobilePush {
 			FirebaseResponse firebaseResponse = pushNotification.get();
 			if (firebaseResponse.getMessage_Id() != null) {
 				log.info("Push notification successfully sent!");
-			} else {
+			} else if (firebaseResponse.getError() != null) {
 				log.error("Error sending push notifications: " + firebaseResponse.toString());
+				log.error("Error message: {} ", firebaseResponse.getError());
 			}
 			return new ResponseEntity<>(firebaseResponse.toString(), HttpStatus.OK);
 
@@ -128,7 +128,6 @@ public class FirebaseMobilePush {
 		FCMNotification notify = new FCMNotification();
 		notify.setTitle(NOTIFICATION_TITLE);
 		notify.setBody(crossingAddress);
-		//notify.setSound("http://www.mediacollege.com/audio/tone/files/1kHz_44100Hz_16bit_05sec.mp3");
 		return notify;
 	}
 

@@ -150,8 +150,74 @@ TABLESPACE pg_default;
 ALTER TABLE public.train_alert
     OWNER to postgres;
     
+-- Table: public.job
+
+-- DROP TABLE public.job;
+
+CREATE TABLE public.job
+(
+    id bigint NOT NULL,
+    enabled boolean,
+    job_type character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT job_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.job
+    OWNER to postgres;
+
+-- Index: job_type_enabled_idx
+
+-- DROP INDEX public.job_type_enabled_idx;
+
+CREATE INDEX job_type_enabled_idx
+    ON public.job USING btree
+    (job_type COLLATE pg_catalog."default", enabled)
+    TABLESPACE pg_default;
     
--- Updates --
+-- Table: public.train_crossing_report
+
+-- DROP TABLE public.train_crossing_report;
+
+CREATE TABLE public.train_crossing_report
+(
+    id bigint NOT NULL,
+    reported_date timestamp without time zone NOT NULL,
+    train_crossing_id bigint,
+    user_id bigint,
+    CONSTRAINT train_crossing_report_pkey PRIMARY KEY (id),
+    CONSTRAINT fk76x9ngmillywkrixu1pom4yxj FOREIGN KEY (train_crossing_id)
+        REFERENCES public.train_crossing (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fktcy9d1a911d0qklix5kb8s5tx FOREIGN KEY (user_id)
+        REFERENCES public.railway_user (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.train_crossing_report
+    OWNER to postgres;
+
+-- Index: crossing_report_date_idx
+
+-- DROP INDEX public.crossing_report_date_idx;
+
+CREATE INDEX crossing_report_date_idx
+    ON public.train_crossing_report USING btree
+    (reported_date)
+    TABLESPACE pg_default;
+    
+------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- Updates ----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 
 -- Column: public.railway_user.device_token
 
@@ -173,3 +239,32 @@ ALTER TABLE public.railway_user
 
 ALTER TABLE public.railway_user
     ADD COLUMN fcm_token character varying(255) COLLATE pg_catalog."default";
+    
+-- Column: public.train_crossing.flagged_active
+
+-- ALTER TABLE public.train_crossing DROP COLUMN flagged_active;
+
+ALTER TABLE public.train_crossing
+    ADD COLUMN flagged_active boolean;
+    
+-- Column: public.train_crossing.time_flagged_active
+
+-- ALTER TABLE public.train_crossing DROP COLUMN time_flagged_active;
+
+ALTER TABLE public.train_crossing
+    ADD COLUMN time_flagged_active timestamp without time zone;
+    
+-- Index: train_crossing_active_idx
+
+-- DROP INDEX public.train_crossing_active_idx;
+
+CREATE INDEX train_crossing_active_idx
+    ON public.train_crossing USING btree
+    (flagged_active, time_flagged_active)
+    TABLESPACE pg_default;
+    
+---------------------------------------------------------------------------------------------------------------------------- 
+---------------------------------------------------------- Jobs ------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+    
+insert into job(id, enabled, job_type) values (1, true, 'MONITOR_ACTIVE_TRAIN_CROSSINGS');

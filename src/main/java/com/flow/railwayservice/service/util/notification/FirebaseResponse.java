@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class FirebaseResponse {
 
     private String message_id;
+    private String error;
+    
+    public FirebaseResponse(){}
 
     public String getMessage_Id(){
     	return message_id;
@@ -13,6 +16,14 @@ public class FirebaseResponse {
     
     public void setMessage_Id(String message_id){
     	this.message_id = message_id;
+    }
+    
+    public String getError(){
+    	return error;
+    }
+    
+    public void setError(String error){
+    	this.error = error;
     }
 
    

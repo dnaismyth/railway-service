@@ -87,7 +87,9 @@ public class TrainCrossingReportService extends ServiceBase {
 		if(isReported){
 			Long reportCount = activeTrainReportCount(trainCrossingId);
 			if(reportCount > 0){
+				// Flag the crossing as active and set the time it had been triggered
 				crossing.setIsFlaggedActive(true);
+				crossing.setTimeFlaggedActive(ZonedDateTime.now());
 				crossingRepo.save(crossing);
 				alertService.sendTrainAlertNotification(crossing.getNotificationTopic(), crossing.getLocation().getAddress());
 			}

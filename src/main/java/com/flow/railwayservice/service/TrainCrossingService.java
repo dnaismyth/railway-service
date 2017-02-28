@@ -1,5 +1,7 @@
 package com.flow.railwayservice.service;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,7 @@ import com.flow.railwayservice.repository.TrainCrossingJDBCRepository;
 import com.flow.railwayservice.repository.TrainCrossingRepository;
 import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
+import com.flow.railwayservice.service.util.TimeUtil;
 
 @Service
 @Transactional
@@ -132,4 +135,25 @@ public class TrainCrossingService extends ServiceBase {
 		trainCrossingRepo.delete(rtc);
 	}
 	
+	/**
+	 * Update crossings that have been marked active for more than the input maxActiveTime
+	 * and set flaggedActive = false
+	 */
+	public void findAndUpdateStaleTrainCrossings(int maxActiveTimeSeconds){
+		List<RTrainCrossing> crossings = trainCrossingRepo.findActiveTrainCrossings();
+		List<RTrainCrossing> updated = new ArrayList<RTrainCrossing>();
+		for(RTrainCrossing rtc : crossings){
+			long timeDifference = TimeUtil.getZonedDateTimeDifference(TimeUtil.getCurrentTime(),
+					rtc.getTimeFlaggedActive(), ChronoUnit.SECONDS);
+			if(timeDifference >= maxActiveTimeSeconds){
+				rtc.setIsFlaggedActive(false);
+				updated.add(rtc);
+			}
+		}
+		
+		// Save updated train crossings that were marked as no longer active
+		if(updated.size() > 0){
+			trainCrossingRepo.save(updated);
+		}
+	}
 }

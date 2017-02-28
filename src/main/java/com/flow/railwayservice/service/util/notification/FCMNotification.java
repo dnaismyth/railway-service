@@ -8,7 +8,7 @@ package com.flow.railwayservice.service.util.notification;
 public class FCMNotification {
 	private String title;
 	private String body;
-	private String sound;
+	//private String sound;  Might add this in to pass through sound link
 	
 	public FCMNotification(){}
 
@@ -27,14 +27,4 @@ public class FCMNotification {
 	public void setBody(String body) {
 		this.body = body;
 	}
-
-	public String getSound() {
-		return sound;
-	}
-
-	public void setSound(String sound) {
-		this.sound = sound;
-	}
-	
-	
 }
