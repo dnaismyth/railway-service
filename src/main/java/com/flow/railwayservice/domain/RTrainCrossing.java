@@ -44,6 +44,13 @@ public class RTrainCrossing implements Serializable {
 	@Column(name="notification_topic")
 	private String notificationTopic;
 	
+	/**
+	 * Flag the train crossing as active if notification alert has been 
+	 * sent to users
+	 */
+	@Column(name="flagged_active")
+	private Boolean isFlaggedActive = false;
+	
 	public RTrainCrossing(){}
 
 	public Long getId() {
@@ -76,6 +83,14 @@ public class RTrainCrossing implements Serializable {
 	
 	public void setNotificationTopic(String notificationTopic){
 		this.notificationTopic = notificationTopic;
+	}
+	
+	public Boolean isFlaggedActive(){
+		return isFlaggedActive;
+	}
+	
+	public void setIsFlaggedActive(Boolean isFlaggedActive){
+		this.isFlaggedActive = isFlaggedActive;
 	}
 	
 }

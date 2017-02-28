@@ -95,6 +95,21 @@ public class TrainCrossingReportTest extends BaseServiceTest {
 	}
 	
 	@Test
+	public void testReportCount() throws ResourceNotFoundException{
+		Location location = new Location();
+		location.setAddress("124 Street");
+		TrainCrossing tc = new TrainCrossing();
+		tc.setRailway("CN");
+		tc.setLocation(location);
+		TrainCrossing created = crossingService.createTrainCrossing(tc);
+		trainCrossingIds.add(created.getId());
+		TrainCrossingReport report = reportService.makeTrainCrossingReport(user.getId(), created.getId());
+		Assert.assertTrue(report.getOperationType().equals(OperationType.CREATE));
+		Long count = reportService.activeTrainReportCount(created.getId());
+		Assert.assertTrue(count == 1);
+	}
+	
+	@Test
 	public void testTimeDifference() throws InterruptedException{
 		ZonedDateTime previous = ZonedDateTime.now();
 		Thread.sleep(500);

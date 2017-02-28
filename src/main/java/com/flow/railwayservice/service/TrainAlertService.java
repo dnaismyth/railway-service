@@ -1,8 +1,10 @@
 package com.flow.railwayservice.service;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.flow.railwayservice.domain.RAudioNotification;
@@ -22,6 +24,7 @@ import com.flow.railwayservice.service.mapper.AudioNotificationMapper;
 import com.flow.railwayservice.service.mapper.TrainAlertMapper;
 import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
+import com.flow.railwayservice.service.util.notification.FirebaseMobilePush;
 
 @Service
 public class TrainAlertService extends ServiceBase {
@@ -97,5 +100,12 @@ public class TrainAlertService extends ServiceBase {
 		RestPreconditions.checkNotNull(pageable);
 		Page<RTrainAlert> rta = trainAlertRepo.findUserTrainCrossingAlertPreferences(userId, pageable);
 		return trainAlertMapper.toTrainAlertPage(rta, pageable);
+	}
+	
+	@Async
+	public void sendTrainAlertNotification(String topic, String address){
+		RestPreconditions.checkNotNull(topic);
+		RestPreconditions.checkNotNull(address);
+		FirebaseMobilePush.sendNotification(topic, address);
 	}
 }

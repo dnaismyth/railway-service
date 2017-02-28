@@ -31,7 +31,7 @@ public class FirebaseMobilePush {
 	
 	private static final String NOTIFICATION_TITLE = "Train Crossing Alert";
 	private static final String NOTIFICATION_PRIORITY = "high";
-	private static final String NOTIFICATION_SOUND = "default";
+	//private static final String NOTIFICATION_SOUND = "default";
 
 	@PostConstruct
 	public void init() {
@@ -78,17 +78,18 @@ public class FirebaseMobilePush {
 		return headers;
 	}
 
-	public static ResponseEntity<String> sendNotification(String topic, String crossingAddress) throws JSONException {
+	public static ResponseEntity<String> sendNotification(String topic, String crossingAddress) {
 		// TODO: Send notification in batches if registrationIds.size > 1000
-		FirebaseMessagingRequest req = buildMessagingRequest(topic, crossingAddress, NOTIFICATION_SOUND);
+		FirebaseMessagingRequest req = buildMessagingRequest(topic, crossingAddress);
 		HttpHeaders headers = buildHeaders();
 		HttpEntity<FirebaseMessagingRequest> request = new HttpEntity<FirebaseMessagingRequest>(req, headers);
-
+		JSONObject obj = new JSONObject(request);
+		log.info(obj.toString());
 		try {
 			CompletableFuture<FirebaseResponse> pushNotification = send(request);
 			CompletableFuture.allOf(pushNotification).join();
 			FirebaseResponse firebaseResponse = pushNotification.get();
-			if (firebaseResponse.getSuccess() == 1) {
+			if (firebaseResponse.getMessage_Id() != null) {
 				log.info("Push notification successfully sent!");
 			} else {
 				log.error("Error sending push notifications: " + firebaseResponse.toString());
@@ -103,14 +104,14 @@ public class FirebaseMobilePush {
 		return new ResponseEntity<>("The push notification cannot be sent.", HttpStatus.BAD_REQUEST);
 	}
 
-	private static FirebaseMessagingRequest buildMessagingRequest(String topic, String crossingAddress, String sound) {
+	private static FirebaseMessagingRequest buildMessagingRequest(String topic, String crossingAddress) {
 		FirebaseMessagingRequest req = new FirebaseMessagingRequest();
 		FCMNotificationData data = buildNotificationData(crossingAddress);
-		FCMNotification notification = buildNotification(crossingAddress, sound);
-		req.setTo(topic);
+		FCMNotification notification = buildNotification(crossingAddress);
+		req.setTo("/topics/" + topic);
 		req.setNotification(notification);
 		req.setData(data);
-		req.setContent_Available(true);
+		req.setContent_available(true);
 		req.setPriority(NOTIFICATION_PRIORITY);
 		return req;
 	}
@@ -123,11 +124,11 @@ public class FirebaseMobilePush {
 		return data;
 	}
 
-	private static FCMNotification buildNotification(String crossingAddress, String sound) {
+	private static FCMNotification buildNotification(String crossingAddress) {
 		FCMNotification notify = new FCMNotification();
 		notify.setTitle(NOTIFICATION_TITLE);
 		notify.setBody(crossingAddress);
-		notify.setSound(sound);
+		//notify.setSound("http://www.mediacollege.com/audio/tone/files/1kHz_44100Hz_16bit_05sec.mp3");
 		return notify;
 	}
 
@@ -172,11 +173,11 @@ public class FirebaseMobilePush {
 			this.notification = notification;
 		}
 
-		public Boolean getContent_Available() {
+		public Boolean getContent_available() {
 			return content_available;
 		}
 
-		public void setContent_Available(Boolean content_available) {
+		public void setContent_available(Boolean content_available) {
 			this.content_available = content_available;
 		}
 
