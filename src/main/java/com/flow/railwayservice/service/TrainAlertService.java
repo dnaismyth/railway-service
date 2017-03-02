@@ -1,6 +1,5 @@
 package com.flow.railwayservice.service;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,6 @@ import com.flow.railwayservice.domain.RTrainAlert;
 import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.domain.UserTrainCrossingPK;
-import com.flow.railwayservice.dto.AudioNotification;
 import com.flow.railwayservice.dto.TrainAlert;
 import com.flow.railwayservice.dto.TrainCrossing;
 import com.flow.railwayservice.dto.User;
@@ -24,7 +22,7 @@ import com.flow.railwayservice.service.mapper.AudioNotificationMapper;
 import com.flow.railwayservice.service.mapper.TrainAlertMapper;
 import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
-import com.flow.railwayservice.service.util.notification.FirebaseMobilePush;
+import com.flow.railwayservice.service.util.firebase.FirebaseMobilePush;
 
 @Service
 public class TrainAlertService extends ServiceBase {

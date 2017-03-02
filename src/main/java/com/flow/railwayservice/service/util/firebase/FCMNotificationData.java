@@ -1,4 +1,4 @@
-package com.flow.railwayservice.service.util.notification;
+package com.flow.railwayservice.service.util.firebase;
 
 /**
  * Class to represent the data within a FCM notification

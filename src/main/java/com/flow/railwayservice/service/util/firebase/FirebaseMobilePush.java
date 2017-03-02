@@ -1,4 +1,4 @@
-package com.flow.railwayservice.service.util.notification;
+package com.flow.railwayservice.service.util.firebase;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,10 +32,6 @@ public class FirebaseMobilePush {
 	private static final String NOTIFICATION_TITLE = "Active Train Crossing Alert";
 	private static final String NOTIFICATION_PRIORITY = "high";
 	//private static final String NOTIFICATION_SOUND = "default";
-
-	@PostConstruct
-	public void init() {
-	}
 
 	static {
 		log.debug("==================Initializing Credentials================== ");

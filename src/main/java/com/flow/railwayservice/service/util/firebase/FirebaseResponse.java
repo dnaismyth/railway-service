@@ -1,4 +1,4 @@
-package com.flow.railwayservice.service.util.notification;
+package com.flow.railwayservice.service.util.firebase;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

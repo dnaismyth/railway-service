@@ -42,7 +42,9 @@ public class TrainCrossingReportService extends ServiceBase {
 
 	private static final long MAX_TRAIN_CROSSING_DELAY = 1200; // max window of time at a train crossing (20 minutes)
 	
-	private static final int MAX_MINUTE_DELAY = 3600; // only allow one report per hour (for the same train crossing)
+	private static final int MAX_MINUTE_DELAY = 0; // only allow one report per hour (for the same train crossing)
+	
+	private static final int TRIGGER_NOTIFICATION_COUNT = 0;
 
 	private TrainCrossingMapper trainCrossingMapper = new TrainCrossingMapper();
 
@@ -83,10 +85,10 @@ public class TrainCrossingReportService extends ServiceBase {
 
 			}
 		}
-		//TODO: Handle the case where the current user is admin
+		//TODO: Handle the case where the current user is admin - send immediate notification?
 		if(isReported){
 			Long reportCount = activeTrainReportCount(trainCrossingId);
-			if(reportCount > 0){
+			if(reportCount > TRIGGER_NOTIFICATION_COUNT){
 				// Flag the crossing as active and set the time it had been triggered
 				crossing.setIsFlaggedActive(true);
 				crossing.setTimeFlaggedActive(ZonedDateTime.now());
