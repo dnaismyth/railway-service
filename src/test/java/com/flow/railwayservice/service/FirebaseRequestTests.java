@@ -7,14 +7,23 @@ import org.json.JSONException;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.flow.railwayservice.service.util.notification.FirebaseMobilePush;
+import com.flow.railwayservice.service.util.firebase.FirebaseDatabase;
+import com.flow.railwayservice.service.util.firebase.FirebaseMobilePush;
 
 @Ignore
-public class PushNotificationTest {
+public class FirebaseRequestTests {
 
 	@Test
 	public void testSendNotification() throws JSONException{
 		String topic = "pittriver";
 		FirebaseMobilePush.sendNotification(topic, "Pitt River");
+	}
+	
+	@Test
+	public void testUpdateTrainCrossing(){
+		Long trainCrossingId = 2305L;
+		Boolean isActive = false;
+		Integer notificationCount = 10;
+		FirebaseDatabase.updateTrainCrossing(trainCrossingId, isActive, notificationCount);
 	}
 }
