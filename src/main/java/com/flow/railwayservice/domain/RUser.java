@@ -90,7 +90,7 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
      * Store the users firebase database token for
      * access to real time data
      */
-    @Column(name="firebase_auth_token", length=1000)
+    @Column(name="firebase_auth_token", length=TextLength.FIREBASE_AUTH_LENGTH)
     private String firebaseAuthToken;
     
     @Enumerated(EnumType.STRING)

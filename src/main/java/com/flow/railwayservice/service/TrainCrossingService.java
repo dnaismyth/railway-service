@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +24,13 @@ import com.flow.railwayservice.repository.TrainCrossingRepository;
 import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
 import com.flow.railwayservice.service.util.TimeUtil;
+import com.flow.railwayservice.service.util.firebase.FirebaseDatabase;
 
 @Service
 @Transactional
 public class TrainCrossingService extends ServiceBase {
-	
+	private static final Logger log = LoggerFactory.getLogger(TrainCrossingService.class);
+
 	@Autowired
 	private TrainCrossingRepository trainCrossingRepo;
 	
@@ -145,8 +149,10 @@ public class TrainCrossingService extends ServiceBase {
 			long timeDifference = TimeUtil.getZonedDateTimeDifference(TimeUtil.getCurrentTime(),
 					rtc.getTimeFlaggedActive(), ChronoUnit.SECONDS);
 			if(timeDifference >= maxActiveTimeSeconds){
+				log.debug("Updating train crossing with id={}", rtc.getId());
 				rtc.setIsFlaggedActive(false);
 				updated.add(rtc);
+				FirebaseDatabase.updateTrainCrossing(rtc.getId(), false, 0); // update real time data, set default values
 			}
 		}
 		
