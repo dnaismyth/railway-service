@@ -263,6 +263,12 @@ CREATE INDEX train_crossing_active_idx
     (flagged_active, time_flagged_active)
     TABLESPACE pg_default;
     
+-- Column: public.railway_user.firebase_auth_token
+
+-- ALTER TABLE public.railway_user DROP COLUMN firebase_auth_token;
+
+ALTER TABLE public.railway_user
+    ADD COLUMN firebase_auth_token character varying(1000) COLLATE pg_catalog."default";
 ---------------------------------------------------------------------------------------------------------------------------- 
 ---------------------------------------------------------- Jobs ------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------

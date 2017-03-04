@@ -23,9 +23,6 @@ import com.flow.railwayservice.web.rest.vm.RestResponse;
 public class UserController extends BaseController {
 	
 	@Autowired
-	private TokenService tokenService;
-	
-	@Autowired
 	private UserService userService;
 	
 	/**
@@ -60,11 +57,13 @@ public class UserController extends BaseController {
 	/**
 	 * Generate a token to access firebase database
 	 * @return
+	 * @throws ResourceNotFoundException 
 	 */
 	@RequestMapping(value = "/users/resources/firebase", method = RequestMethod.GET)
 	@ResponseBody
-	public RestResponse<String> getFirebaseToken(){
-		String token = FirebaseAuthentication.createCustomFirebaseToken();
+	public RestResponse<String> getFirebaseToken() throws ResourceNotFoundException{
+		User user = getCurrentUser();
+		String token = userService.getUserFirebaseToken(user);
 		return new RestResponse<String>(token);
 	}
 }

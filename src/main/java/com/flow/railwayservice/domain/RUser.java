@@ -1,6 +1,7 @@
 package com.flow.railwayservice.domain;
 
 import com.flow.railwayservice.dto.Platform;
+import com.flow.railwayservice.dto.TextLength;
 import com.flow.railwayservice.dto.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
@@ -72,11 +73,25 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     @Embedded
     private RLocation location;
     
+    /**
+     * iOS unique device token
+     */
     @Column(name="device_token")
     private String deviceToken;
     
+    /**
+     * Firebase notification token
+     * (Chec if needed later)
+     */
     @Column(name="fcm_token")
     private String fcmToken;
+    
+    /**
+     * Store the users firebase database token for
+     * access to real time data
+     */
+    @Column(name="firebase_auth_token", length=1000)
+    private String firebaseAuthToken;
     
     @Enumerated(EnumType.STRING)
     @Column(name="platform")
@@ -200,6 +215,14 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
 
 	public void setFcmToken(String fcmToken) {
 		this.fcmToken = fcmToken;
+	}
+	
+	public String getFirebaseAuthToken(){
+		return firebaseAuthToken;
+	}
+	
+	public void setFirebaseAuthToken(String firebaseAuthToken){
+		this.firebaseAuthToken = firebaseAuthToken;
 	}
 
 	@Override

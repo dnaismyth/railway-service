@@ -15,6 +15,7 @@ import com.flow.railwayservice.service.mapper.UserMapper;
 import com.flow.railwayservice.service.util.CompareUtil;
 import com.flow.railwayservice.service.util.RandomUtil;
 import com.flow.railwayservice.service.util.RestPreconditions;
+import com.flow.railwayservice.service.util.firebase.FirebaseAuthentication;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
 import com.flow.railwayservice.web.rest.vm.SignupRequest;
 
@@ -321,6 +322,31 @@ public class UserService extends ServiceBase {
     	}
     	
     	return user;
+    }
+    
+    /**
+     * Check if a user already has an existing token,
+     * if not generate a new one
+     * @param user
+     * @return
+     * @throws ResourceNotFoundException 
+     */
+    public String getUserFirebaseToken(User user) throws ResourceNotFoundException{
+    	RestPreconditions.checkNotNull(user);
+    	RUser ru = loadUserEntity(user.getId());
+    	
+    	// If the user already has an authorization token, just return value
+    	if(ru.getFirebaseAuthToken() != null){
+    		return ru.getFirebaseAuthToken();
+    	}
+    	
+    	//TODO: If a user logs out, remove their current firebase auth token
+    	
+    	// Otherwise, we will create a new token
+		String token = FirebaseAuthentication.createCustomFirebaseToken();
+		ru.setFirebaseAuthToken(token);
+		userRepository.save(ru);
+		return token;   	
     }
   
 }
