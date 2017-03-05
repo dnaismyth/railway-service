@@ -6,6 +6,8 @@ import java.time.temporal.ChronoUnit;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.flow.railwayservice.domain.RTrainCrossing;
@@ -65,7 +67,8 @@ public class TrainCrossingReportService extends ServiceBase {
 		boolean isReported = false;
 		// Check if the current role is USER.
 		if (reporter.getRole().equals(UserRole.USER)) {
-			RTrainCrossingReport lastReport = reportRepo.findReportByUserAndTrainCrossingId(userId, trainCrossingId);
+			Page<RTrainCrossingReport> reports = reportRepo.findReportByUserAndTrainCrossingId(userId, trainCrossingId, new PageRequest(0,1));
+			RTrainCrossingReport lastReport = reports.getNumberOfElements() > 0 ? reports.getContent().get(0) : null;
 			if (lastReport != null) {
 				long timeDifference = TimeUtil.getZonedDateTimeDifference(TimeUtil.getCurrentTime(),
 						lastReport.getReportedDate(), ChronoUnit.SECONDS);
