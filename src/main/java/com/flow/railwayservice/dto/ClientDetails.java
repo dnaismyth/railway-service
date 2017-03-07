@@ -19,6 +19,30 @@ public class ClientDetails {
 		this.authorities = authorities;
 	}
 	
+	public ClientDetails(Platform platform, Set<GrantedAuthority> authorities){
+		mapClientIdFromPlatform(platform);
+		this.authorities = authorities;
+	}
+	
+	private void mapClientIdFromPlatform(Platform platform){
+		switch(platform){
+			case APNS :
+				scope.add("read");
+				scope.add("write");
+				resourceIds.add("res_railwayservice");
+				clientId = "railwayservice-ios";
+				break;
+			case WEB :
+				scope.add("read");
+				scope.add("write");
+				resourceIds.add("res_railwayservice");
+				clientId = "railwayservice-web";
+				break;
+			default:
+				break;
+		}
+	}
+	
 	private void mapClientDetails(String clientId){
 		switch(clientId){
 			case "railwayservice-ios":

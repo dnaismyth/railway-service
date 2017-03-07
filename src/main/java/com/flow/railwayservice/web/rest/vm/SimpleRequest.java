@@ -13,7 +13,7 @@ public class SimpleRequest implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String value;
+	private Object value;
 	
 	public SimpleRequest(){}
 	
@@ -21,11 +21,11 @@ public class SimpleRequest implements Serializable {
 		this.value = value;
 	}
 	
-	public String getValue(){
+	public Object getValue(){
 		return value;
 	}
 	
-	public void setValue(String value){
+	public void setValue(Object value){
 		this.value = value;
 	}
 }

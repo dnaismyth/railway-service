@@ -1,5 +1,7 @@
 package com.flow.railwayservice.service.mapper;
 
+import java.util.UUID;
+
 import com.flow.railwayservice.domain.RUser;
 import com.flow.railwayservice.dto.User;
 
@@ -28,6 +30,8 @@ public class UserMapper {
     		ru.setName(u.getName());
     		ru.setActivated(u.isActivated());
     		ru.setLocation(locationMapper.toRLocation(u.getLocation()));
+    		ru.setLangKey(u.getLangKey());
+    		ru.setReceiveEmailUpdates(u.receiveEmailUpdates());
     	}
     	
     	return ru;
@@ -51,6 +55,8 @@ public class UserMapper {
     		u.setName(ru.getName());
     		u.setRole(ru.getRole());	
     		u.setLocation(locationMapper.toLocation(ru.getLocation()));
+    		u.setLangKey(ru.getLangKey());
+    		u.setReceiveEmailUpdates(u.receiveEmailUpdates());
     	}
     	
     	return u;

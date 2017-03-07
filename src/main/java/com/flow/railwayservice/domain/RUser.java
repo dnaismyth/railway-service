@@ -79,6 +79,9 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
     @Column(name="device_token")
     private String deviceToken;
     
+    @Column(name = "receive_email_updates")
+    private Boolean receiveEmailUpdates;
+    
     /**
      * Firebase notification token
      * (Chec if needed later)
@@ -223,6 +226,14 @@ public class RUser extends AbstractAuditingEntity implements Serializable {
 	
 	public void setFirebaseAuthToken(String firebaseAuthToken){
 		this.firebaseAuthToken = firebaseAuthToken;
+	}
+	
+	public Boolean receiveEmailUpdates(){
+		return receiveEmailUpdates;
+	}
+	
+	public void setReceiveEmailUpdates(Boolean receiveEmailUpdates){
+		this.receiveEmailUpdates = receiveEmailUpdates = true;
 	}
 
 	@Override

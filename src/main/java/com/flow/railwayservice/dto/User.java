@@ -14,6 +14,8 @@ public class User {
 	private Boolean activated;
 	@JsonIgnore
 	private UserRole role;
+	private String langKey;
+	private Boolean receiveEmailUpdates;
 	
 	public User(){}
 
@@ -79,6 +81,22 @@ public class User {
 	
 	public void setRole(UserRole role){
 		this.role = role;
+	}
+	
+	public String getLangKey(){
+		return langKey;
+	}
+	
+	public void setLangKey(String langKey){
+		this.langKey = langKey;
+	}
+	
+	public Boolean receiveEmailUpdates(){
+		return receiveEmailUpdates;
+	}
+	
+	public void setReceiveEmailUpdates(Boolean receiveEmailUpdates){
+		this.receiveEmailUpdates = receiveEmailUpdates;
 	}
 	
 }

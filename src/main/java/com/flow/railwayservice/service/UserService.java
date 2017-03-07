@@ -348,5 +348,67 @@ public class UserService extends ServiceBase {
 		userRepository.save(ru);
 		return token;   	
     }
+    
+    /**
+     * Toggle user preference to receive email updates
+     * @param user
+     * @param receiveEmailUpdates
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    public User toggleReceiveEmailUpdates(User user, Boolean receiveEmailUpdates) throws ResourceNotFoundException{
+    	RestPreconditions.checkNotNull(user);
+    	RestPreconditions.checkNotNull(receiveEmailUpdates);
+    	RUser ru = loadUserEntity(user.getId());
+    	if(!CompareUtil.compare(ru.receiveEmailUpdates(), receiveEmailUpdates)){
+    		ru.setReceiveEmailUpdates(receiveEmailUpdates);
+    		RUser updated = userRepository.save(ru);
+    		return userMapper.toUser(updated);
+    	}
+    	return user;
+    }
+    
+    /**
+     * Update users preferred language key
+     * @param user
+     * @param langKey
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    public User updateLanguageKey(User user, String langKey) throws ResourceNotFoundException{
+    	RestPreconditions.checkNotNull(user);
+    	RestPreconditions.checkNotNull(langKey);
+    	RUser ru = loadUserEntity(user.getId());
+    	if(!CompareUtil.compare(ru.getLangKey(), langKey)){
+    		ru.setLangKey(langKey);
+    		RUser saved = userRepository.save(ru);
+    		return userMapper.toUser(saved);
+    	}
+    	
+    	return user;
+    }
+    
+	public boolean updatePassword(User user, String password) throws ResourceNotFoundException {
+		RestPreconditions.checkNotNull(user);
+		RestPreconditions.checkNotNull(password);
+		RUser ru = loadUserEntity(user.getId());
+		String encryptedPassword = passwordEncoder.encode(password);
+		ru.setPassword(encryptedPassword);
+		RUser saved = userRepository.save(ru);
+		if(CompareUtil.compare(saved.getPassword(), encryptedPassword)){
+			return true;
+		}	
+		return false;
+	}
+	
+	/**
+	 * Find the user's platform
+	 * @param userId
+	 * @return
+	 */
+	public Platform findPlatformByUserId(Long userId){
+		RestPreconditions.checkNotNull(userId);
+		return userRepository.findPlatformByUserId(userId);
+	}
   
 }
