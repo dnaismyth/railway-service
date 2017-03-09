@@ -66,7 +66,7 @@ public class TrainCrossingController extends BaseController {
 	 */
 	@RequestMapping(value="/nearby/traincrossings", method = RequestMethod.GET)
 	@ResponseBody
-	public CollectionResponse<TrainCrossing> getNearbyTrainCrossings(@RequestParam(required=false, value = RADIUS_PARAM) Integer radius,
+	public CollectionResponse<TrainCrossing> getNearbyTrainCrossings(@RequestParam(required=false, value = RADIUS_PARAM) Double radius,
 			@RequestParam(required=true, value = LAT_PARAM) Double latitude,
 			@RequestParam(required = true, value = LON_PARAM) Double longitude){
 		User user = getCurrentUser();

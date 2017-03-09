@@ -60,7 +60,7 @@ public class TrainCrossingService extends ServiceBase {
 	 * @param radius
 	 * @return
 	 */
-	public List<TrainCrossing> getTrainCrossingsNearby(User user, double latitude, double longitude, int radius){
+	public List<TrainCrossing> getTrainCrossingsNearby(User user, double latitude, double longitude, double radius){
 		RestPreconditions.checkNotNull(radius);
 		RestPreconditions.checkNotNull(latitude);
 		RestPreconditions.checkNotNull(longitude);

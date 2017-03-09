@@ -13,6 +13,7 @@ import com.flow.railwayservice.web.rest.vm.KeyAndPasswordVM;
 import com.flow.railwayservice.web.rest.vm.ManagedUserVM;
 import com.flow.railwayservice.web.rest.vm.RestResponse;
 import com.flow.railwayservice.web.rest.vm.SignupRequest;
+import com.flow.railwayservice.web.rest.vm.SimpleRequest;
 import com.flow.railwayservice.web.rest.vm.UserDTO;
 import com.flow.railwayservice.web.rest.util.HeaderUtil;
 
@@ -192,6 +193,23 @@ public class AccountResource extends BaseController{
                 return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
             }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
     }
+    
+    /**
+     * Request reset password for mobile device
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/account/reset_password")
+    @ResponseBody
+    public ResponseEntity<?> mobileRequestResetPassword(@RequestBody final SimpleRequest req){
+    	return userService.requestPasswordReset((String)req.getValue())
+                .map(user -> {
+                    mailService.sendPasswordResetMail(user);
+                    return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
+                }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
+    }
+    
+    
 
     /**
      * POST   /account/reset_password/finish : Finish to reset the password of the user

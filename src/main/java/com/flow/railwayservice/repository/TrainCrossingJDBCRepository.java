@@ -17,7 +17,7 @@ public class TrainCrossingJDBCRepository extends BaseJDBCRepository {
 	
 	private static final String SQL_QUERY_NEARBY_TRAINCROSSINGS = "sql.traincrossing.findNearbyTrainCrossings";
 	
-	public List<TrainCrossing> findNearbyTrainCrossings(double latitude, double longitude, int radius){
+	public List<TrainCrossing> findNearbyTrainCrossings(double latitude, double longitude, double radius){
 		String query = readQueryFromProperties(SQL_QUERY_NEARBY_TRAINCROSSINGS);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("radius", radius);

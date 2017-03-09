@@ -14,7 +14,7 @@ public class BaseController {
 	protected static final String LAT_PARAM = "lat";
 	protected static final String LON_PARAM = "lon";
 	protected static final String RADIUS_PARAM = "radius";
-	protected static final int DEFAULT_RADIUS = 100;
+	protected static final Double DEFAULT_RADIUS = 100.00;
 	
 	@Autowired
 	private UserService userService;
