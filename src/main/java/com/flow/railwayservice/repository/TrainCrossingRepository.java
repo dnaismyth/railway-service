@@ -16,4 +16,7 @@ public interface TrainCrossingRepository extends JpaRepository<RTrainCrossing, L
 	
 	@Query("SELECT rt FROM RTrainCrossing rt WHERE rt.isFlaggedActive = true AND rt.timeFlaggedActive IS NOT NULL")
 	public List<RTrainCrossing> findActiveTrainCrossings();
+	
+	@Query("SELECT rt FROM RTrainCrossing rt WHERE rt.isFormatted != true OR rt.isFormatted IS NULL")
+	public Page<RTrainCrossing> findTrainCrossingsToFormat(Pageable pageable);
 }

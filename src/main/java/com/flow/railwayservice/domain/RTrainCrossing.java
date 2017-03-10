@@ -58,6 +58,13 @@ public class RTrainCrossing implements Serializable {
 	@Column(name="time_flagged_active")
 	private ZonedDateTime timeFlaggedActive;
 	
+	/**
+	 * Flag for future data formats
+	 */
+	@Column(name="is_formatted")
+	private Boolean isFormatted;
+	
+	
 	public RTrainCrossing(){}
 
 	public Long getId() {
@@ -108,4 +115,12 @@ public class RTrainCrossing implements Serializable {
 		this.timeFlaggedActive = timeFlaggedActive;
 	}
 	
+	public Boolean isFormatted(){
+		return isFormatted;
+	}
+	
+	public void setIsFormatted(Boolean isFormatted){
+		this.isFormatted = isFormatted;
+	}
+		
 }

@@ -6,14 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flow.railwayservice.domain.RLocation;
 import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.dto.TrainCrossing;
 import com.flow.railwayservice.dto.User;
@@ -149,7 +152,6 @@ public class TrainCrossingService extends ServiceBase {
 			long timeDifference = TimeUtil.getZonedDateTimeDifference(TimeUtil.getCurrentTime(),
 					rtc.getTimeFlaggedActive(), ChronoUnit.SECONDS);
 			if(timeDifference >= maxActiveTimeSeconds){
-				log.debug("Updating train crossing with id={}", rtc.getId());
 				rtc.setIsFlaggedActive(false);
 				updated.add(rtc);
 				FirebaseDatabase.updateTrainCrossing(rtc.getId(), false, 0); // update real time data, set default values
@@ -160,5 +162,26 @@ public class TrainCrossingService extends ServiceBase {
 		if(updated.size() > 0){
 			trainCrossingRepo.save(updated);
 		}
+	}
+	
+	/**
+	 * Format the address & city for train crossings
+	 * @param size
+	 */
+	public void formatTrainCrossingData(int size){
+		Page<RTrainCrossing> trainCrossings = trainCrossingRepo.findTrainCrossingsToFormat(new PageRequest(0,size));
+		List<RTrainCrossing> updated = new ArrayList<RTrainCrossing>();
+		log.debug("Found {} train crossing(s) that need to be formatted...", trainCrossings.getContent().size());
+		for(RTrainCrossing rtc : trainCrossings.getContent()){
+			RLocation loc = rtc.getLocation();
+			loc.setAddress(WordUtils.capitalizeFully(loc.getAddress()));
+			loc.setCity(WordUtils.capitalizeFully(loc.getCity()));
+			rtc.setIsFormatted(true);
+			rtc.setLocation(loc);
+			updated.add(rtc);
+		}
+		
+		log.debug("Finished formatting {} train crossings", size);
+		trainCrossingRepo.save(updated);
 	}
 }

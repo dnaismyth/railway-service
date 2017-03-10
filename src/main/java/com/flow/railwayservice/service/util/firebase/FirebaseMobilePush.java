@@ -84,14 +84,15 @@ public class FirebaseMobilePush {
 			CompletableFuture<FirebaseResponse> pushNotification = send(request);
 			CompletableFuture.allOf(pushNotification).join();
 			FirebaseResponse firebaseResponse = pushNotification.get();
-			if (firebaseResponse.getMessage_Id() != null) {
-				log.info("Push notification successfully sent!");
-			} else if (firebaseResponse.getError() != null) {
-				log.error("Error sending push notifications: " + firebaseResponse.toString());
-				log.error("Error message: {} ", firebaseResponse.getError());
+			if (firebaseResponse != null) {
+				if (firebaseResponse.getMessage_Id() != null) {
+					log.info("Push notification successfully sent!");
+				} else if (firebaseResponse.getError() != null) {
+					log.error("Error sending push notifications: " + firebaseResponse.toString());
+					log.error("Error message: {} ", firebaseResponse.getError());
+				}
+				return new ResponseEntity<>(firebaseResponse.toString(), HttpStatus.OK);
 			}
-			return new ResponseEntity<>(firebaseResponse.toString(), HttpStatus.OK);
-
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

@@ -22,6 +22,7 @@ import com.flow.railwayservice.repository.TrainCrossingRepository;
 import com.flow.railwayservice.service.mapper.TrainCrossingMapper;
 import com.flow.railwayservice.service.util.RestPreconditions;
 import com.flow.railwayservice.service.util.TimeUtil;
+import com.flow.railwayservice.service.util.firebase.FirebaseDatabase;
 
 /**
  * Report an active train crossing
@@ -97,6 +98,7 @@ public class TrainCrossingReportService extends ServiceBase {
 				crossing.setTimeFlaggedActive(ZonedDateTime.now());
 				crossingRepo.save(crossing);
 				alertService.sendTrainAlertNotification(crossing.getNotificationTopic(), crossing.getLocation().getAddress());
+				FirebaseDatabase.updateTrainCrossingStatus(trainCrossingId, true);	// set the status in firebase to active of the current train crossing
 			}
 		}
 		return reportDTO;

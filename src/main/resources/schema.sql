@@ -269,6 +269,13 @@ CREATE INDEX train_crossing_active_idx
 
 ALTER TABLE public.railway_user
     ADD COLUMN firebase_auth_token character varying(1000) COLLATE pg_catalog."default";
+    
+-- Column: public.train_crossing.is_formatted
+
+-- ALTER TABLE public.train_crossing DROP COLUMN is_formatted;
+
+ALTER TABLE public.train_crossing
+    ADD COLUMN is_formatted boolean;
 ---------------------------------------------------------------------------------------------------------------------------- 
 ---------------------------------------------------------- Jobs ------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------

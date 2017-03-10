@@ -6,6 +6,8 @@ import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,9 @@ public class FirebaseDatabase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+        // ip address of the service URL(like.23.28.244.244)
+	    HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> hostname.equals("127.0.0.1"));
 		databaseEndpoint = props.getProperty("FCMDatabaseUrl");
 		databaseSecret = props.getProperty("databaseSecret");
 		log.debug("The endpoint is: {}", databaseEndpoint);
@@ -69,8 +74,6 @@ public class FirebaseDatabase {
 		HttpHeaders headers = buildHeaders();
 		FirebaseTrainCrossingModel updateModel = buildTrainCrossingModel(isActive, notificationCount);
 		HttpEntity<FirebaseTrainCrossingModel> request = new HttpEntity<FirebaseTrainCrossingModel>(updateModel, headers);
-		JSONObject obj = new JSONObject(request);
-		log.info(obj.toString());
 		try {
 			CompletableFuture<FirebaseTrainCrossingModel> trainCrossingUpdate = requestModelUpdate(request, url);
 			CompletableFuture.allOf(trainCrossingUpdate).join();
@@ -88,7 +91,36 @@ public class FirebaseDatabase {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<>("Update could not be processed.", HttpStatus.BAD_REQUEST);
+	}
 	
+	/**
+	 * Update the train crossing status to active/not active
+	 * @param trainCrossingId
+	 * @param isActive
+	 * @return
+	 */
+	public static ResponseEntity<String> updateTrainCrossingStatus(Long trainCrossingId, Boolean isActive){
+		String url = buildTrainCrossingEndpoint(trainCrossingId);
+		HttpHeaders headers = buildHeaders();
+		FirebaseTrainCrossingModel updateModel = buildTrainCrossingModel(isActive, null);
+		HttpEntity<FirebaseTrainCrossingModel> request = new HttpEntity<FirebaseTrainCrossingModel>(updateModel, headers);
+		try {
+			CompletableFuture<FirebaseTrainCrossingModel> trainCrossingUpdate = requestModelUpdate(request, url);
+			CompletableFuture.allOf(trainCrossingUpdate).join();
+			FirebaseTrainCrossingModel response = trainCrossingUpdate.get();
+			if(response.getIs_active().equals(isActive)){
+				log.info("Successfully updated Train Crossing: {} with Status: {}", trainCrossingId, isActive);
+			} else {
+				log.error("Error updating train crossing.");
+			}
+			return new ResponseEntity<>(trainCrossingUpdate.toString(), HttpStatus.OK);
+		} catch (InterruptedException e){
+			e.printStackTrace();
+		} catch (ExecutionException e){
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<>("Update could not be processed.", HttpStatus.BAD_REQUEST);
 	}
 	
 	private static HttpHeaders buildHeaders() {
@@ -100,9 +132,12 @@ public class FirebaseDatabase {
 	private static FirebaseTrainCrossingModel buildTrainCrossingModel(Boolean isActive, Integer notificationCount){
 		FirebaseTrainCrossingModel model = new FirebaseTrainCrossingModel();
 		model.setIs_active(isActive);
-		model.setNotification_count(notificationCount);
+		if(notificationCount != null){
+			model.setNotification_count(notificationCount);
+		}
 		return model;
 	}
+	
 	
 	/**
 	 * Class to represent the firebase train crossing model for
