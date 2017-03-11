@@ -35,6 +35,7 @@ public class TrainCrossingMapper {
 			tc.setLocation(locationMapper.toLocation(rtc.getLocation()));
 			tc.setNotificationTopic(rtc.getNotificationTopic());
 			tc.setIsFlaggedActive(rtc.isFlaggedActive());
+			tc.setLastFlaggedActive(rtc.getTimeFlaggedActive());
 		}
 		return tc;
 	}

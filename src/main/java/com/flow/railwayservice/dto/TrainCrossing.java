@@ -1,6 +1,7 @@
 package com.flow.railwayservice.dto;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 public class TrainCrossing implements Serializable {
 
@@ -15,6 +16,7 @@ public class TrainCrossing implements Serializable {
 	private Boolean isMarkedForAlerts = false;
 	private String notificationTopic;
 	private Boolean isFlaggedActive;
+	private ZonedDateTime lastFlaggedActive;
 	
 	public TrainCrossing(){}
 	
@@ -64,5 +66,13 @@ public class TrainCrossing implements Serializable {
 	
 	public void setIsFlaggedActive(Boolean isFlaggedActive){
 		this.isFlaggedActive = isFlaggedActive;
+	}
+	
+	public ZonedDateTime getLastFlaggedActive(){
+		return lastFlaggedActive;
+	}
+	
+	public void setLastFlaggedActive(ZonedDateTime lastFlaggedActive){
+		this.lastFlaggedActive = lastFlaggedActive;
 	}
 }

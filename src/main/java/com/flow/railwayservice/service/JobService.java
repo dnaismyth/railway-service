@@ -26,7 +26,7 @@ public class JobService {
 	 * Job to update active train crossings
 	 * To run every 60000ms
 	 */
-	//@Scheduled(fixedRate = 60000)
+	@Scheduled(fixedRate = 60000)
 	public void monitorActiveTrainCrossings(){
 		RJob job = jobRepo.findJobByType(JobType.MONITOR_ACTIVE_TRAIN_CROSSINGS);
 		if(job != null && job.isEnabled()){

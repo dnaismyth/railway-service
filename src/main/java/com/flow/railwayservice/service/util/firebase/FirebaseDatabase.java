@@ -38,7 +38,7 @@ public class FirebaseDatabase {
 		}
 		
         // ip address of the service URL(like.23.28.244.244)
-	    HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> hostname.equals("127.0.0.1"));
+	    //HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> hostname.equals("127.0.0.1"));
 		databaseEndpoint = props.getProperty("FCMDatabaseUrl");
 		databaseSecret = props.getProperty("databaseSecret");
 		log.debug("The endpoint is: {}", databaseEndpoint);
