@@ -1,5 +1,6 @@
 package com.flow.railwayservice.service.mapper;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.flow.railwayservice.domain.RTrainCrossing;
 import com.flow.railwayservice.dto.TrainCrossing;
+import com.flow.railwayservice.service.util.TimeUtil;
 
 /**
  * Train crossing mapping helper
@@ -35,7 +37,8 @@ public class TrainCrossingMapper {
 			tc.setLocation(locationMapper.toLocation(rtc.getLocation()));
 			tc.setNotificationTopic(rtc.getNotificationTopic());
 			tc.setIsFlaggedActive(rtc.isFlaggedActive());
-			tc.setLastFlaggedActive(rtc.getTimeFlaggedActive());
+			String lastFlaggedActive = TimeUtil.getZonedDateTimeDifferenceFormatString(TimeUtil.getCurrentTime(), rtc.getTimeFlaggedActive());
+			tc.setLastFlaggedActive(lastFlaggedActive);
 		}
 		return tc;
 	}
