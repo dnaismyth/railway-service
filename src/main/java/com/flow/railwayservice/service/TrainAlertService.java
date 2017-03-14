@@ -61,7 +61,7 @@ public class TrainAlertService extends ServiceBase {
 		}
 		RAudioNotification ra = audioRepository.findOne(audioId);
 		trainAlertRepo.save(new RTrainAlert(pk, ra));
-		return trainMapper.toTrainCrossing(rtc);
+		return trainMapper.toTrainCrossing(rtc, false);
 		
 	}
 	
@@ -83,7 +83,7 @@ public class TrainAlertService extends ServiceBase {
 		}
 		
 		trainAlertRepo.delete(pk);
-		return trainMapper.toTrainCrossing(rtc);
+		return trainMapper.toTrainCrossing(rtc, false);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public class TrainAlertService extends ServiceBase {
 		RestPreconditions.checkNotNull(userId);
 		RestPreconditions.checkNotNull(pageable);
 		Page<RTrainAlert> rta = trainAlertRepo.findUserTrainCrossingAlertPreferences(userId, pageable);
-		return trainAlertMapper.toTrainAlertPage(rta, pageable);
+		return trainAlertMapper.toTrainAlertPage(rta, pageable, true);
 	}
 	
 	@Async

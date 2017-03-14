@@ -26,12 +26,12 @@ public class TrainAlertMapper {
 	 * @param rta
 	 * @return
 	 */
-	public TrainAlert toTrainAlert(RTrainAlert rta){
+	public TrainAlert toTrainAlert(RTrainAlert rta, boolean showLastFlaggedActive){
 		TrainAlert alert = null;
 		if(rta != null){
 			alert = new TrainAlert();
 			alert.setAudioNotification(audioNotificationMapper.toAudioNotification(rta.getAudio()));
-			alert.setTrainCrossing(trainCrossingMapper.toTrainCrossing(rta.getUserTrainCrossingPK().getTrainCrossing()));
+			alert.setTrainCrossing(trainCrossingMapper.toTrainCrossing(rta.getUserTrainCrossingPK().getTrainCrossing(), showLastFlaggedActive));
 		}
 		
 		return alert;
@@ -43,11 +43,11 @@ public class TrainAlertMapper {
 	 * @param pageable
 	 * @return
 	 */
-	public Page<TrainAlert> toTrainAlertPage(Page<RTrainAlert> rt, Pageable pageable){
+	public Page<TrainAlert> toTrainAlertPage(Page<RTrainAlert> rt, Pageable pageable, boolean showLastFlaggedActive){
 		List<TrainAlert> trainAlerts = new ArrayList<TrainAlert>();
 		Iterator<RTrainAlert> iter = rt.iterator();
 		while(iter.hasNext()){
-			trainAlerts.add(toTrainAlert(iter.next()));
+			trainAlerts.add(toTrainAlert(iter.next(), showLastFlaggedActive));
 		}
 		return new PageImpl<TrainAlert>(trainAlerts, pageable, trainAlerts.size());
 	}

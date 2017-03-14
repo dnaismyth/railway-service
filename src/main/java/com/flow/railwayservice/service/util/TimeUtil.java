@@ -28,6 +28,9 @@ public class TimeUtil {
 	 */
 	public static String getZonedDateTimeDifferenceFormatString(ZonedDateTime currentTime, ZonedDateTime pastTime){
 		String formatted = "";
+		if(pastTime == null || currentTime == null){
+			return "";
+		}
 		long day = ChronoUnit.DAYS.between(pastTime, currentTime);
 		long hour = ChronoUnit.HOURS.between(pastTime, currentTime);
 		long minute = ChronoUnit.MINUTES.between(pastTime, currentTime);

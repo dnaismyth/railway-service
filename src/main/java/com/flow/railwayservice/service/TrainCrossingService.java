@@ -54,7 +54,7 @@ public class TrainCrossingService extends ServiceBase {
 	public TrainCrossing getTrainCrossing(Long trainCrossingId) throws ResourceNotFoundException{
 		RestPreconditions.checkNotNull(trainCrossingId);
 		RTrainCrossing crossing = loadTrainCrossing(trainCrossingId);
-		return trainCrossingMapper.toTrainCrossing(crossing);
+		return trainCrossingMapper.toTrainCrossing(crossing, true);
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class TrainCrossingService extends ServiceBase {
 		RestPreconditions.checkNotNull(pageable);
 		Page<RTrainCrossing> allTrainCrossings = trainCrossingRepo.findAll(pageable);
 		//Page<RTrainCrossing> allBCTrainCrossings = trainCrossingRepo.findAllTrainCrossingsInBC(pageable);
-		return trainCrossingMapper.toRTrainCrossing(allTrainCrossings, pageable);
+		return trainCrossingMapper.toRTrainCrossing(allTrainCrossings, pageable, true);
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class TrainCrossingService extends ServiceBase {
 		RestPreconditions.checkNotNull(crossing);
 		RTrainCrossing rtc = trainCrossingMapper.toRTrainCrossing(crossing);
 		RTrainCrossing saved = trainCrossingRepo.save(rtc);
-		return trainCrossingMapper.toTrainCrossing(saved);
+		return trainCrossingMapper.toTrainCrossing(saved, false);
 	}
 	
 	/**

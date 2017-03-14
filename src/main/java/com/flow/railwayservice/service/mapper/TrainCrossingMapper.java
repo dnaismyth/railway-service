@@ -28,7 +28,7 @@ public class TrainCrossingMapper {
 	 * @param rtc
 	 * @return
 	 */
-	public TrainCrossing toTrainCrossing(RTrainCrossing rtc){
+	public TrainCrossing toTrainCrossing(RTrainCrossing rtc, boolean showLastFlaggedActive){
 		TrainCrossing tc = null;
 		if(rtc != null){
 			tc = new TrainCrossing();
@@ -37,8 +37,10 @@ public class TrainCrossingMapper {
 			tc.setLocation(locationMapper.toLocation(rtc.getLocation()));
 			tc.setNotificationTopic(rtc.getNotificationTopic());
 			tc.setIsFlaggedActive(rtc.isFlaggedActive());
-			String lastFlaggedActive = TimeUtil.getZonedDateTimeDifferenceFormatString(TimeUtil.getCurrentTime(), rtc.getTimeFlaggedActive());
-			tc.setLastFlaggedActive(lastFlaggedActive);
+			if(showLastFlaggedActive){
+				String lastFlaggedActive = TimeUtil.getZonedDateTimeDifferenceFormatString(TimeUtil.getCurrentTime(), rtc.getTimeFlaggedActive());
+				tc.setLastFlaggedActive(lastFlaggedActive);
+			}
 		}
 		return tc;
 	}
@@ -61,11 +63,11 @@ public class TrainCrossingMapper {
 		return rtc;
 	}
 	
-	public Page<TrainCrossing> toRTrainCrossing(Page<RTrainCrossing> rt, Pageable pageable){
+	public Page<TrainCrossing> toRTrainCrossing(Page<RTrainCrossing> rt, Pageable pageable, boolean showLastFlaggedActive){
 		List<TrainCrossing> trainCrossings = new ArrayList<TrainCrossing>();
 		Iterator<RTrainCrossing> iter = rt.iterator();
 		while(iter.hasNext()){
-			trainCrossings.add(toTrainCrossing(iter.next()));
+			trainCrossings.add(toTrainCrossing(iter.next(), showLastFlaggedActive));
 		}
 		return new PageImpl<TrainCrossing>(trainCrossings, pageable, trainCrossings.size());
 	}

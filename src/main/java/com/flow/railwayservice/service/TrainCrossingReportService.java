@@ -79,13 +79,13 @@ public class TrainCrossingReportService extends ServiceBase {
 					RTrainCrossingReport report = new RTrainCrossingReport(crossing, reporter);
 					reportRepo.save(report);
 					isReported = true;
-					reportDTO = new TrainCrossingReport(trainCrossingMapper.toTrainCrossing(crossing), OperationType.CREATE);
+					reportDTO = new TrainCrossingReport(trainCrossingMapper.toTrainCrossing(crossing, false), OperationType.CREATE);
 				}
 			} else {
 				RTrainCrossingReport report = new RTrainCrossingReport(crossing, reporter);
 				reportRepo.save(report);
 				isReported = true;
-				reportDTO = new TrainCrossingReport(trainCrossingMapper.toTrainCrossing(crossing), OperationType.CREATE);
+				reportDTO = new TrainCrossingReport(trainCrossingMapper.toTrainCrossing(crossing, false), OperationType.CREATE);
 
 			}
 		}
