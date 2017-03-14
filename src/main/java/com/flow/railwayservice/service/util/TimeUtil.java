@@ -37,19 +37,19 @@ public class TimeUtil {
 		if(day >= 1){
 			formatted = day + " day";
 			if(day > 1){
-				formatted.concat("s");
+				formatted = formatted + "s";
 			}
 			return formatted;
 		} else if(hour >= 1){
 			formatted = hour + " hour";
 			if(hour > 1){
-				formatted.concat("s");
+				formatted = formatted + "s";
 			}
 			return formatted;
 		} else {
 			formatted = minute + " minute";
 			if(minute > 1){
-				formatted.concat("s");
+				formatted = formatted + "s";
 			}
 		}
 		
