@@ -7,10 +7,11 @@ import org.json.JSONException;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.flow.railwayservice.service.util.firebase.FirebaseAuthentication;
 import com.flow.railwayservice.service.util.firebase.FirebaseDatabase;
 import com.flow.railwayservice.service.util.firebase.FirebaseMobilePush;
 
-@Ignore
+//@Ignore
 public class FirebaseRequestTests {
 
 	@Test
@@ -25,5 +26,10 @@ public class FirebaseRequestTests {
 		Boolean isActive = false;
 		Integer notificationCount = 10;
 		FirebaseDatabase.updateTrainCrossing(trainCrossingId, isActive, notificationCount);
+	}
+	
+	@Test
+	public void testGetCustomToken(){
+		FirebaseAuthentication.createCustomFirebaseToken();
 	}
 }
